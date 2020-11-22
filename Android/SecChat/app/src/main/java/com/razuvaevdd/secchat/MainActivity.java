@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(//"MyKey:"+PrivateKeyBase64+
                 " getPrivateKey:"+session.getPrivateKey().toBase64()+" getDecryptionKey:"+session.getDecryptionKey().toBase64()+
                 " getMyDestination:"+session.getMyDestination().toBase64());
-        я
+
         //The additional main method code comes here...
         }catch (Exception e){
             textView.setText(e.getMessage());
