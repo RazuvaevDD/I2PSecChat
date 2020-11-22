@@ -83,3 +83,19 @@ Android/SecChat/lint/generated/
 Android/SecChat/lint/outputs/
 Android/SecChat/lint/tmp/
 # Android/SecChat/lint/reports/
+
+#from Android Project (with duplicate)
+Android/SecChat/*.iml
+Android/SecChat/.gradle
+Android/SecChat/local.properties
+Android/SecChat/.idea/caches
+Android/SecChat/.idea/libraries
+Android/SecChat/.idea/modules.xml
+Android/SecChat/.idea/workspace.xml
+Android/SecChat/.idea/navEditor.xml
+Android/SecChat/.idea/assetWizardSettings.xml
+Android/SecChat/.DS_Store
+Android/SecChat/build
+Android/SecChat/captures
+Android/SecChat/.externalNativeBuild
+Android/SecChat/.cxx
