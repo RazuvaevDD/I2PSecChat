@@ -19,6 +19,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        Database.create_database("sec_chat_database.db");
         launch(args);
     }
 }
