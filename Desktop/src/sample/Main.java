@@ -12,7 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("gui/sample.fxml"));
-        primaryStage.setTitle("I2PSexChat");
+        primaryStage.setTitle("I2PSecChat");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
