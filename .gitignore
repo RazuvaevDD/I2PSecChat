@@ -107,7 +107,7 @@ Desktop/*.iml
 Desktop/.gradle
 Desktop/local.properties
 Desktop/.idea/caches
-Desktop/.idea/libraries
+# Desktop/.idea/libraries
 Desktop/.idea/modules.xml
 Desktop/.idea/workspace.xml
 Desktop/.idea/navEditor.xml
