@@ -5,7 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import sample.Database.Database;
+import sample.Encryptor.Encryptor;
+import sample.Encryptor.LoginData;
+
+import java.security.NoSuchAlgorithmException;
+
 
 public class Main extends Application {
 
@@ -19,7 +25,17 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+
 //        Database.create_database("sec_chat_database.db");
+
+//        LoginData data = new LoginData("Login", "Password");
+//        try {
+//            String key = Encryptor.generateKey(data);
+//            System.out.println(key);
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//        }
+
         launch(args);
     }
 }
