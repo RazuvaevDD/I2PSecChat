@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.Database.Database;
 
 public class Main extends Application {
 
@@ -18,6 +19,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+//        Database.create_database("sec_chat_database.db");
         launch(args);
     }
 }
