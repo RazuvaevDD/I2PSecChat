@@ -13,7 +13,6 @@ import java.util.Base64;
 public class Encryptor {
 
     private static SecretKeySpec secretKey;
-    private static byte[] key;
 
     public static String generateKey(LoginData loginData) throws NoSuchAlgorithmException {
         String login = loginData.getLogin();
@@ -52,7 +51,7 @@ public class Encryptor {
     private static void setKey(String myKey) {
         MessageDigest sha = null;
         try {
-            key = myKey.getBytes(StandardCharsets.UTF_8);
+            byte[] key = myKey.getBytes(StandardCharsets.UTF_8);
             sha = MessageDigest.getInstance("MD5");
             key = sha.digest(key);
             key = Arrays.copyOf(key, 16);
