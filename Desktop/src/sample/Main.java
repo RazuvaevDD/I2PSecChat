@@ -10,10 +10,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("gui/sample.fxml"));
-        primaryStage.setTitle("I2PSexChat");
+        Parent root = FXMLLoader.load(getClass().getResource("gui/fxml/LoginFrame.fxml"));
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("I2PSeсChat");
         primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 900, 600));
+        //primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
     }
 
