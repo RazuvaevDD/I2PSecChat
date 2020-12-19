@@ -26,7 +26,27 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-//        Database.create_database("sec_chat_database.db");
+        Database db = new Database();
+        db.create_database("sec_chat_database.db");
+        db.create_all_tables();
+        db.print_all_tables();
+
+//        db.add_user("Ivanov Ivan", "key1", "info1");
+//        db.add_user("Petrov Petr", "key2", "info2");
+//        db.add_user("Vasiliev Vasiliy", "key3", "info3");
+//
+//        db.add_room("chat1", 5, "chat_info1", "chat_key1");
+//        db.add_room("chat2", 5, "chat_info2", "chat_key2");
+//
+//        db.add_user_to_room(0, 1);
+//        db.add_user_to_room(5, 3);
+//
+//        db.register_message(0, 1, "message_text", "19.12.2020");
+
+//        db.delete_user(1);
+//        db.delete_room(1);
+//        db.change_user_info(3, "changed info");
+//        db.print_all_tables();
 
 //        LoginData data = new LoginData("Login", "Password");
 //        try {
