@@ -10,6 +10,7 @@ import sample.Database.Database;
 import sample.Encryptor.Encryptor;
 import sample.Encryptor.LoginData;
 import sample.Config.ConfigParser;
+import sample.GUI_InfoShower.InfoShower;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -27,8 +28,10 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        ConfigParser configParser = new ConfigParser();
-        System.out.println(configParser.getPassword());
+        InfoShower infoShower = new InfoShower();
+        System.out.println(infoShower.getDate());
+//        ConfigParser configParser = new ConfigParser();
+//        System.out.println(configParser.getPassword());
 //        Database db = new Database();
 //        List<String> users = db.getUsersInRoom(1);
 
