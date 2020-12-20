@@ -28,8 +28,6 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         Database db = new Database();
-        List<String> users = db.getUsersInRoom(1);
-        System.out.println(users);
 
 //        LoginData data = new LoginData("Login", "Password");
 //        try {

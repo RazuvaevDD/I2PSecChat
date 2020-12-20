@@ -1,11 +1,13 @@
 package sample.Database;
 
+import org.cybergarage.upnp.device.ST;
 import org.sqlite.SQLiteConfig;
 
 import java.io.*;
 import java.sql.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Database {
@@ -34,22 +36,21 @@ public class Database {
         create_message_table();
     }
 
-    public void print_all_tables() {
-        System.out.println("Users:");
-        print_users();
-        System.out.println("Rooms:");
-        print_rooms();
-        System.out.println("Users in rooms:");
-        print_rooms_users();
-        System.out.println("Messages");
-        print_messages();
-    }
+//    public void print_all_tables() {
+//        System.out.println("Users:");
+//        System.out.println("Rooms:");
+//        print_rooms();
+//        System.out.println("Users in rooms:");
+//        print_rooms_users();
+//        System.out.println("Messages");
+//        print_messages();
+//    }
 
     private void create_user_table() {
         String create_user_table = "create table if not exists `user` (\n"
                 + "`id` integer not null primary key autoincrement,\n"
-                + "`name` char(50) not null,\n"
-                + "`private_key` char(50) not null,\n"
+                + "`name` char(50) not null unique,\n"
+                + "`private_key` char(50) not null unique,\n"
                 + "`info` char(100),\n"
                 + "`picture` blob\n"
                 + ");";
@@ -64,10 +65,10 @@ public class Database {
     private void create_room_table() {
         String create_room_table = "create table if not exists `room` (\n"
                 + "`id` integer not null primary key autoincrement,\n"
-                + "`name` char(50) not null,\n"
+                + "`name` char(50) not null unique,\n"
                 + "`info` char(100),\n"
                 + "`delete_message_time` int,\n"
-                + "`aes_key` char(50),\n"
+                + "`aes_key` char(50) not null unique,\n"
                 + "`picture` blob\n"
                 + ");";
         try (Connection connection = this.connect();
@@ -154,6 +155,21 @@ public class Database {
         }
     }
 
+    public int get_id(String table_name, String name){
+        int id = 0;
+        String get_id = String.format("select id from %s where name = '%s'", table_name, name);
+        try (Connection connection = this.connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_id)) {
+
+            while (result.next()) {
+                id = result.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return id;
+    }
+
     public void add_user_to_room(int room_id, int user_id) {
         String add_room = "insert into rooms values (?, ?)";
         try (Connection connection = this.connect();
@@ -166,41 +182,51 @@ public class Database {
         }
     }
 
-    private void print_users() {
+    public List<List<Object>> getAllUsers() {
+        List<List<Object>> users = new ArrayList<>();;
         String get_table_values = MessageFormat.format("select * from {0}", "user");
         try (Connection connection = this.connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
+            List<Object> user;
             while (result.next()) {
-                System.out.println(result.getInt("id") + "\t" +
-                        result.getString("name") + "\t" +
-                        result.getString("private_key") + "\t" +
-                        result.getString("info"));
+                user = new ArrayList<>();
+                user.add(result.getInt("id"));
+                user.add(result.getString("name"));
+                user.add(result.getString("private_key"));
+                user.add(result.getString("info"));
+                user.add(result.getBytes("picture"));
+                users.add(user);
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
+        } return  users;
     }
 
-    private void print_rooms() {
+    public List<List<Object>> getAllRooms() {
+        List<List<Object>> rooms = new ArrayList<>();;
         String get_table_values = MessageFormat.format("select * from {0}", "room");
         try (Connection connection = this.connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
+            List<Object> room;
             while (result.next()) {
-                System.out.println(result.getInt("id") + "\t" +
-                        result.getString("name") + "\t" +
-                        result.getString("info") + "\t" +
-                        result.getInt("delete_message_time") + "\t" +
-                        result.getString("aes_key"));
+                room = new ArrayList<>();
+                room.add(result.getInt("id"));
+                room.add(result.getString("name"));
+                room.add(result.getString("info"));
+                room.add(result.getInt("delete_message_time"));
+                room.add(result.getString("aes_key"));
+                room.add(result.getBytes("picture"));
+                rooms.add(room);
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
+        } return  rooms;
     }
 
     private void print_messages() {
@@ -260,12 +286,12 @@ public class Database {
         }
     }
 
-    public void change_user_info(int user_id, String new_info) {
-        String change_user_info = "update user set info = ? where id = ?";
+    public void change_user_info(String table_name, int id, String new_info) {
+        String change_user_info = String.format("update %s set info = ? where id = ?", table_name);
         try (Connection connection = this.connect();
              PreparedStatement preparedStatement = connection.prepareStatement(change_user_info)) {
             preparedStatement.setString(1, new_info);
-            preparedStatement.setInt(2, user_id);
+            preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -326,5 +352,28 @@ public class Database {
         }
         return users_in_room;
     }
+
+    public List<List<String>> getMessagesInRoom(int room_id) {
+        List<List<String>> messages_in_room = new ArrayList<>();
+        String get_messages_in_room = String.format("select user.name, message.text, message.time from user, message where user.id = message.user_id and message.room_id = %x;", room_id);
+        try (Connection connection = this.connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_messages_in_room)) {
+
+            List<String> message;
+            while (result.next()) {
+                message = new ArrayList<>();
+                message.add(result.getString("name"));
+                message.add(result.getString("text"));
+                message.add(result.getString("time"));
+                messages_in_room.add(message);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return messages_in_room;
+    }
+
 
 }
