@@ -16,9 +16,6 @@ import java.util.ArrayList;
 
 public class LoginController {
 
-    //@FXML
-    //private TextField loginFramePasswordField;
-
     @FXML
     private Button loginFrameSignInButton;
 
@@ -35,12 +32,6 @@ public class LoginController {
     private VBox messagesVBox;
 
     private String passwordForCheck = "admin";
-
-    private void fillMessagesVBox(){
-        for (int i = 0; i < 10; i++) {
-            messagesVBox.getChildren().add(new javafx.scene.control.Label("TEST LABEL"));
-        }
-    }
 
     private boolean isPasswordValid(String password) {
         if (password.trim().length() == 0) {
@@ -66,7 +57,7 @@ public class LoginController {
             System.out.println("Button SIGN IN was pressed");
 
             String password = loginFramePasswordField.getText();
-            if (isPasswordValid(password)){
+            if (isPasswordValid(password)) {
                 System.out.println("Here will open MainFrame");
                 loginFrameSignInButton.getScene().getWindow().hide();
                 FXMLLoader loader = new FXMLLoader();
