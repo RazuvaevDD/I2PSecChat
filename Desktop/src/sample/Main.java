@@ -29,6 +29,17 @@ public class Main extends Application {
 
         Database db = new Database();
         List<String> users = db.getUsersInRoom(1);
+//        db.add_user("test", "test2", "infffa", "");
+//        db.add_room("test_room", 3, "infffa", "aes_key", "");
+        db.print_all_tables();
+        System.out.println(db.get_id("user", "test"));
+//        db.create_all_tables();
+//        db.print_all_tables();
+//        db.drop_table("user");
+//        db.drop_table("room");
+//        db.drop_table("rooms");
+//        db.drop_table("message");
+//        db.print_all_tables();
 
 //        db.register_message(2, 3, "te222xt1", "2020-12-20 14:13:43.342");
 //        db.register_message(2, 2, "tex222t2", "2020-12-20 14:14:43.342");

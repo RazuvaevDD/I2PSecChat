@@ -50,8 +50,8 @@ public class Database {
     private void create_user_table() {
         String create_user_table = "create table if not exists `user` (\n"
                 + "`id` integer not null primary key autoincrement,\n"
-                + "`name` char(50) not null,\n"
-                + "`private_key` char(50) not null,\n"
+                + "`name` char(50) not null unique,\n"
+                + "`private_key` char(50) not null unique,\n"
                 + "`info` char(100),\n"
                 + "`picture` blob\n"
                 + ");";
@@ -66,10 +66,10 @@ public class Database {
     private void create_room_table() {
         String create_room_table = "create table if not exists `room` (\n"
                 + "`id` integer not null primary key autoincrement,\n"
-                + "`name` char(50) not null,\n"
+                + "`name` char(50) not null unique,\n"
                 + "`info` char(100),\n"
                 + "`delete_message_time` int,\n"
-                + "`aes_key` char(50),\n"
+                + "`aes_key` char(50) not null unique,\n"
                 + "`picture` blob\n"
                 + ");";
         try (Connection connection = this.connect();
@@ -154,6 +154,21 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public int get_id(String table_name, String name){
+        int id = 0;
+        String get_id = String.format("select id from %s where name = '%s'", table_name, name);
+        try (Connection connection = this.connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_id)) {
+
+            while (result.next()) {
+                id = result.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return id;
     }
 
     public void add_user_to_room(int room_id, int user_id) {
@@ -350,5 +365,6 @@ public class Database {
         }
         return messages_in_room;
     }
+
 
 }
