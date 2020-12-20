@@ -11,6 +11,7 @@ import sample.Encryptor.Encryptor;
 import sample.Encryptor.LoginData;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 
 public class Main extends Application {
@@ -26,7 +27,9 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-//        Database.create_database("sec_chat_database.db");
+        Database db = new Database();
+        List<String> users = db.getUsersInRoom(1);
+        System.out.println(users);
 
 //        LoginData data = new LoginData("Login", "Password");
 //        try {
