@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import sample.Database.Database;
 import sample.Encryptor.Encryptor;
 import sample.Encryptor.LoginData;
+import sample.Config.ConfigParser;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -26,9 +27,11 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        ConfigParser configParser = new ConfigParser();
+        System.out.println(configParser.getPassword());
+//        Database db = new Database();
+//        List<String> users = db.getUsersInRoom(1);
 
-        Database db = new Database();
-        List<String> users = db.getUsersInRoom(1);
 
 //        LoginData data = new LoginData("Login", "Password");
 //        try {
