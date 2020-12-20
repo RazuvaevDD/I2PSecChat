@@ -55,8 +55,15 @@ public class I2PServer extends Thread{
             System.out.println("Подключаемся к I2P...");
             I2PSocketManager manager = I2PSocketManagerFactory.createManager(inputStream);
 
+            I2PServerSocket serverSocket = null;
+            try{
+                serverSocket = manager.getServerSocket();
+            }catch(Exception e){
+                System.err.println("Не удалось подключиться к I2P сети.\n" +
+                        "Проверьте статус I2P сети по адресу http://localhost:7657/home");
+                System.exit(0);
+            }
 
-            I2PServerSocket serverSocket = manager.getServerSocket();
             I2PSession session = manager.getSession();
             //Print the base64 string, the regular string would look like garbage.
             myDestination = session.getMyDestination().toBase64();
@@ -71,7 +78,6 @@ public class I2PServer extends Thread{
             t.start();
         }catch(Exception e){
             e.printStackTrace();
-            System.exit(0);
         }
     }
 

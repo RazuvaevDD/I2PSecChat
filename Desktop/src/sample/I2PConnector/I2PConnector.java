@@ -12,19 +12,36 @@ public class I2PConnector {
     private static I2PServer i2pServer = new I2PServer();
     private static I2PClient i2pClient = new I2PClient();
 
+    /*
+    Проверяет, были ли получены новые сообщения
+     */
     public I2PConnector(){
         i2pServer.start();
         getMyAccount();
     }
 
+    /*
+    Отправляет сообщение
+     */
     public static void sendMessage(Message msg){
-        i2pClient.SendMsg(msg);
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                i2pClient.SendMsg(msg);
+            }
+        });
+        t.start();
     }
 
+    /*
+    Получает новые сообщения
+     */
     public static ArrayList<Message> getNewMessages(){
         return i2pServer.getNewMessages();
     }
 
+    /*
+    Проверяет, были ли получены новые сообщения
+     */
     public static boolean haveNewMessages(){
         return i2pServer.haveNewMessages();
     }
@@ -46,13 +63,4 @@ public class I2PConnector {
     }
 }
 
-class StartServer extends Thread {
 
-    StartServer(String name){
-        super(name);
-    }
-
-    public void run(){
-
-    }
-}
