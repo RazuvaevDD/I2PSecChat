@@ -36,6 +36,9 @@ public class Main extends Application {
 //        List<String> users = db.getUsersInRoom(1);
 
 
+//        Database db = new Database();
+
+
 //        LoginData data = new LoginData("Login", "Password");
 //        try {
 //            String key = Encryptor.generateKey(data);
