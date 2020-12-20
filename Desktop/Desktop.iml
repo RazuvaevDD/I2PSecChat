@@ -10,5 +10,6 @@
     <orderEntry type="library" exported="" name="sqlite-jdbc-3.32.3.2" level="project" />
     <orderEntry type="library" exported="" name="org.xerial:sqlite-jdbc:3.32.3.2" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.32.3.2" level="project" />
+    <orderEntry type="library" name="json-simple-1.1.1" level="project" />
   </component>
 </module>
