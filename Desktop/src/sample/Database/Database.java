@@ -2,6 +2,7 @@ package sample.Database;
 
 import org.sqlite.SQLiteConfig;
 
+import java.io.*;
 import java.sql.*;
 import java.text.MessageFormat;
 
@@ -23,27 +24,6 @@ public class Database {
         }
         return  conn;
     }
-
-//    public void create_database(String fileName) {
-//
-//        String dir = System.getProperty("user.dir");
-//         this.url = "jdbc:sqlite:" + dir + "\\src\\sample\\Database\\sql_database\\" + fileName;
-//
-//        SQLiteConfig config = new SQLiteConfig();
-//        config.enforceForeignKeys(true);
-//
-//        try (Connection conn = DriverManager.getConnection(this.url, config.toProperties())) {
-//            if (conn != null) {
-//                DatabaseMetaData meta = conn.getMetaData();
-//                Statement s = conn.createStatement(); s.executeUpdate("PRAGMA foreign_keys = ON");
-//                System.out.println("The driver name is " + meta.getDriverName());
-//                System.out.println("A new database has been created.");
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    };
 
     public void create_all_tables() {
         create_user_table();
@@ -68,7 +48,8 @@ public class Database {
                 + "`id` integer not null primary key autoincrement,\n"
                 + "`name` char(50) not null,\n"
                 + "`private_key` char(50) not null,\n"
-                + "`info` char(100)\n"
+                + "`info` char(100),\n"
+                + "`picture` blob\n"
                 + ");";
         try (Connection connection = this.connect();
              Statement statement = connection.createStatement()) {
@@ -84,7 +65,8 @@ public class Database {
                 + "`name` char(50) not null,\n"
                 + "`info` char(100),\n"
                 + "`delete_message_time` int,\n"
-                + "`aes_key` char(50)\n"
+                + "`aes_key` char(50),\n"
+                + "`picture` blob\n"
                 + ");";
         try (Connection connection = this.connect();
              Statement statement = connection.createStatement()) {
@@ -127,27 +109,29 @@ public class Database {
         }
     }
 
-    public void add_user(String name, String private_key, String info) {
-        String add_user = "insert into user values (null, ?, ?, ?)";
+    public void add_user(String name, String private_key, String info, String file_name) {
+        String add_user = "insert into user values (null, ?, ?, ?, ?)";
         try (Connection connection = this.connect();
         PreparedStatement preparedStatement = connection.prepareStatement(add_user)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, private_key);
             preparedStatement.setString(3, info);
+            preparedStatement.setBytes(4, readFile(file_name));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void add_room(String name, int delete_message_time, String info, String aes_key) {
-        String add_room = "insert into room values (null, ?, ?, ?, ?)";
+    public void add_room(String name, int delete_message_time, String info, String aes_key, String file_name) {
+        String add_room = "insert into room values (null, ?, ?, ?, ?, ?)";
         try (Connection connection = this.connect();
              PreparedStatement preparedStatement = connection.prepareStatement(add_room)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, info);
             preparedStatement.setInt(3, delete_message_time);
             preparedStatement.setString(4, aes_key);
+            preparedStatement.setBytes(5, readFile(file_name));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -286,10 +270,38 @@ public class Database {
         }
     }
 
-    public void drop_table() {
-        String drop_table = "drop table room";
+    public void drop_table(String table_name) {
+        String drop_table = String.format("drop table %s", table_name);
         try (Connection connection = this.connect();
              PreparedStatement preparedStatement = connection.prepareStatement(drop_table)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private byte[] readFile(String file) {
+        ByteArrayOutputStream bos = null;
+        try {
+            File f = new File(file);
+            FileInputStream fis = new FileInputStream(f);
+            byte[] buffer = new byte[1024];
+            bos = new ByteArrayOutputStream();
+            for (int len; (len = fis.read(buffer)) != -1;) {
+                bos.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return bos != null ? bos.toByteArray() : null;
+    }
+
+    public void update_picture(String table_name, int user_id, String filename) {
+        String change_user_info = String.format("update %s set picture = ? where id = ?", table_name);
+        try (Connection connection = this.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(change_user_info)) {
+            preparedStatement.setBytes(1, readFile(filename));
+            preparedStatement.setInt(2, user_id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
