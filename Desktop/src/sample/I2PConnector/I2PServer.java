@@ -71,6 +71,7 @@ public class I2PServer extends Thread{
             t.start();
         }catch(Exception e){
             e.printStackTrace();
+            System.exit(0);
         }
     }
 
