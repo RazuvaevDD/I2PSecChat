@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Database {
 
-    private Connection connect() {
+    private static Connection connect() {
         String dir = System.getProperty("user.dir");
         String url = "jdbc:sqlite:" + dir + "\\src\\sample\\Database\\sql_database\\sec_chat_database.db";
 
@@ -26,10 +26,10 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return  conn;
+        return conn;
     }
 
-    public void create_all_tables() {
+    public static void create_all_tables() {
         create_user_table();
         create_room_table();
         create_rooms_table();
@@ -46,7 +46,7 @@ public class Database {
 //        print_messages();
 //    }
 
-    private void create_user_table() {
+    private static void create_user_table() {
         String create_user_table = "create table if not exists `user` (\n"
                 + "`id` integer not null primary key autoincrement,\n"
                 + "`name` char(50) not null unique,\n"
@@ -54,7 +54,7 @@ public class Database {
                 + "`info` char(100),\n"
                 + "`picture` blob\n"
                 + ");";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement()) {
             statement.execute(create_user_table);
         } catch (SQLException e) {
@@ -62,7 +62,7 @@ public class Database {
         }
     }
 
-    private void create_room_table() {
+    private static void create_room_table() {
         String create_room_table = "create table if not exists `room` (\n"
                 + "`id` integer not null primary key autoincrement,\n"
                 + "`name` char(50) not null unique,\n"
@@ -71,7 +71,7 @@ public class Database {
                 + "`aes_key` char(50) not null unique,\n"
                 + "`picture` blob\n"
                 + ");";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement()) {
             statement.execute(create_room_table);
         } catch (SQLException e) {
@@ -79,14 +79,14 @@ public class Database {
         }
     }
 
-    private void create_rooms_table() {
+    private static void create_rooms_table() {
         String create_rooms_table = "create table if not exists `rooms` (\n"
                 + "`room_id` int not null,\n"
                 + "`user_id` int not null,\n"
                 + "constraint `fk_room_id` foreign key (`room_id`) references `room` (`id`) on delete cascade on update cascade,\n"
                 + "constraint `fk_user_id`foreign key (`user_id`) references `user` (`id`) on delete cascade on update cascade\n"
                 + ");";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement()) {
             statement.execute(create_rooms_table);
         } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class Database {
         }
     }
 
-    private void create_message_table() {
+    private static void create_message_table() {
         String create_message_table = "create table if not exists `message` (\n"
                 + "`id` integer not null primary key autoincrement,\n"
                 + "`room_id` int not null,\n"
@@ -104,7 +104,7 @@ public class Database {
                 + "foreign key (`room_id`) references `room` (`id`) on delete cascade on update cascade,\n"
                 + "foreign key (`user_id`) references `user` (`id`) on delete cascade on update cascade\n"
                 + ");";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement()) {
             statement.execute(create_message_table);
         } catch (SQLException e) {
@@ -112,9 +112,9 @@ public class Database {
         }
     }
 
-    public void add_user(String name, String private_key, String info, String file_name) {
+    public static void add_user(String name, String private_key, String info, String file_name) {
         String add_user = "insert into user values (null, ?, ?, ?, ?)";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
         PreparedStatement preparedStatement = connection.prepareStatement(add_user)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, private_key);
@@ -126,9 +126,9 @@ public class Database {
         }
     }
 
-    public void add_room(String name, int delete_message_time, String info, String aes_key, String file_name) {
+    public static void add_room(String name, int delete_message_time, String info, String aes_key, String file_name) {
         String add_room = "insert into room values (null, ?, ?, ?, ?, ?)";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(add_room)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, info);
@@ -141,9 +141,9 @@ public class Database {
         }
     }
 
-    public void register_message(int room_id, int user_id, String text, String date) {
+    public static void register_message(int room_id, int user_id, String text, String date) {
         String add_room = "insert into message values (null, ?, ?, ?, ?)";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(add_room)) {
             preparedStatement.setInt(1, room_id);
             preparedStatement.setInt(2, user_id);
@@ -155,10 +155,10 @@ public class Database {
         }
     }
 
-    public int get_id(String table_name, String name){
+    public static int get_id(String table_name, String name){
         int id = 0;
         String get_id = String.format("select id from %s where name = '%s'", table_name, name);
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_id)) {
 
@@ -170,9 +170,9 @@ public class Database {
         } return id;
     }
 
-    public void add_user_to_room(int room_id, int user_id) {
+    public static void add_user_to_room(int room_id, int user_id) {
         String add_room = "insert into rooms values (?, ?)";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(add_room)) {
             preparedStatement.setInt(1, room_id);
             preparedStatement.setInt(2, user_id);
@@ -182,10 +182,10 @@ public class Database {
         }
     }
 
-    public List<List<Object>> getAllUsers() {
+    public static List<List<Object>> getAllUsers() {
         List<List<Object>> users = new ArrayList<>();;
         String get_table_values = MessageFormat.format("select * from {0}", "user");
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
@@ -205,10 +205,10 @@ public class Database {
         } return  users;
     }
 
-    public List<List<Object>> getAllRooms() {
+    public static List<List<Object>> getAllRooms() {
         List<List<Object>> rooms = new ArrayList<>();;
         String get_table_values = MessageFormat.format("select * from {0}", "room");
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
@@ -229,9 +229,9 @@ public class Database {
         } return  rooms;
     }
 
-    private void print_messages() {
+    private static void print_messages() {
         String get_table_values = MessageFormat.format("select * from {0}", "message");
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
@@ -248,9 +248,9 @@ public class Database {
         }
     }
 
-    private void print_rooms_users() {
+    private static void print_rooms_users() {
         String get_table_values = MessageFormat.format("select * from {0}", "rooms");
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
@@ -264,9 +264,9 @@ public class Database {
         }
     }
 
-    public void delete_user(int user_id) {
+    public static void delete_user(int user_id) {
         String delete_user = "delete from user where id = ?";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(delete_user)) {
             preparedStatement.setInt(1, user_id);
             preparedStatement.executeUpdate();
@@ -275,9 +275,9 @@ public class Database {
         }
     }
 
-    public void delete_room(int room_id) {
+    public static void delete_room(int room_id) {
         String delete_room = "delete from room where id = ?";
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(delete_room)) {
             preparedStatement.setInt(1, room_id);
             preparedStatement.executeUpdate();
@@ -286,9 +286,9 @@ public class Database {
         }
     }
 
-    public void change_user_info(String table_name, int id, String new_info) {
+    public static void change_user_info(String table_name, int id, String new_info) {
         String change_user_info = String.format("update %s set info = ? where id = ?", table_name);
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(change_user_info)) {
             preparedStatement.setString(1, new_info);
             preparedStatement.setInt(2, id);
@@ -298,9 +298,9 @@ public class Database {
         }
     }
 
-    public void drop_table(String table_name) {
+    public static void drop_table(String table_name) {
         String drop_table = String.format("drop table %s", table_name);
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(drop_table)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -308,7 +308,7 @@ public class Database {
         }
     }
 
-    private byte[] readFile(String file) {
+    private static byte[] readFile(String file) {
         ByteArrayOutputStream bos = null;
         try {
             File f = new File(file);
@@ -324,9 +324,9 @@ public class Database {
         return bos != null ? bos.toByteArray() : null;
     }
 
-    public void update_picture(String table_name, int user_id, String filename) {
+    public static void update_picture(String table_name, int user_id, String filename) {
         String update_picture = String.format("update %s set picture = ? where id = ?", table_name);
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(update_picture)) {
             preparedStatement.setBytes(1, readFile(filename));
             preparedStatement.setInt(2, user_id);
@@ -336,10 +336,10 @@ public class Database {
         }
     }
 
-    public List<String> getUsersInRoom(int room_id) {
+    public static List<String> getUsersInRoom(int room_id) {
         List<String> users_in_room = new ArrayList<>();
         String get_users_in_room = String.format("select user.name from user, rooms where user.id = rooms.user_id and rooms.room_id = %x;", room_id);
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_users_in_room)) {
 
@@ -353,10 +353,10 @@ public class Database {
         return users_in_room;
     }
 
-    public List<List<String>> getMessagesInRoom(int room_id) {
+    public static List<List<String>> getMessagesInRoom(int room_id) {
         List<List<String>> messages_in_room = new ArrayList<>();
         String get_messages_in_room = String.format("select user.name, message.text, message.time from user, message where user.id = message.user_id and message.room_id = %x;", room_id);
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_messages_in_room)) {
 
@@ -374,6 +374,5 @@ public class Database {
         }
         return messages_in_room;
     }
-
 
 }
