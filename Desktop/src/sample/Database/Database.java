@@ -1,11 +1,13 @@
 package sample.Database;
 
+import org.cybergarage.upnp.device.ST;
 import org.sqlite.SQLiteConfig;
 
 import java.io.*;
 import java.sql.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Database {
@@ -325,6 +327,28 @@ public class Database {
             System.out.println(e.getMessage());
         }
         return users_in_room;
+    }
+
+    public List<List<String>> getMessagesInRoom(int room_id) {
+        List<List<String>> messages_in_room = new ArrayList<>();
+        String get_messages_in_room = String.format("select user.name, message.text, message.time from user, message where user.id = message.user_id and message.room_id = %x;", room_id);
+        try (Connection connection = this.connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_messages_in_room)) {
+
+            List<String> message;
+            while (result.next()) {
+                message = new ArrayList<>();
+                message.add(result.getString("name"));
+                message.add(result.getString("text"));
+                message.add(result.getString("time"));
+                messages_in_room.add(message);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return messages_in_room;
     }
 
 }

@@ -29,7 +29,17 @@ public class Main extends Application {
 
         Database db = new Database();
         List<String> users = db.getUsersInRoom(1);
-        System.out.println(users);
+
+//        db.register_message(2, 3, "te222xt1", "2020-12-20 14:13:43.342");
+//        db.register_message(2, 2, "tex222t2", "2020-12-20 14:14:43.342");
+//        db.register_message(2, 3, "tex222t3", "2020-12-20 14:15:43.342");
+//        db.register_message(2, 2, "tex222t4", "2020-12-20 14:16:43.342");
+
+        List<List<String>> test = db.getMessagesInRoom(1);
+//        System.out.println(test);
+//        for (String[] strings : test) {
+//            System.out.println(strings);
+//        }
 
 //        LoginData data = new LoginData("Login", "Password");
 //        try {
