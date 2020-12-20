@@ -1,32 +1,58 @@
 package sample.I2PConnector;
 
+import sample.Objects.Account;
+import sample.Objects.Message;
 
-import net.i2p.client.I2PSession;
-import net.i2p.client.streaming.I2PServerSocket;
-import net.i2p.client.streaming.I2PSocketManager;
-import net.i2p.client.streaming.I2PSocketManagerFactory;
+import java.util.ArrayList;
 
 public class I2PConnector {
 
-    public static void main(String[] args) {
-        try{
-            //String PrivateKeyBase64 = "GgjBDrQal27OoUNVuBb3W8g-sG8KN1mlR68sldBpgNSk84Wu4zAvMox~40nMOB2DSGuNJXbcKRadhIKmKKYiMp9yOf0PRrgcExt2uy4FCr1BHxtDe4HYVM-WEpDJ~HoMKH4eU3grJGhPxZw8pUGleZpTvePumN9175V4bomuOUzoPVqwogkCTTy0RHB3ERoMfLkFxbzfYGJKLtg-gwYv7Hmvz5l5nYGnahoLiCaSgFm8O3qWEZRHO-KQQuVus7IVwzQCblTvy2UWFUEz4y2gWWXDVLVUGzcaVN-xDTGPT5kezRV8KFse1vg4RZptzJ-grDqLE7aZrXXDaKn35iDrEz9g1IL4fGeC5iKkwUK~CfSnWDHwXyAIB23zdcAlTE6p0iAb-ebpkS95o2Sciag2oxMgnaNWlxT2phrmmRWy0~B1avYD3PW~5ZLGfXuymeztUdD2AIKjeuHT9Vd9SRPRrs2O46kSeuy-uudpkqxZyb3TFVmlLMSZXYM2jrW6yMBaAAAA";
-            //Initialize application
-            I2PSocketManager manager = I2PSocketManagerFactory.createManager();//new Base64InputStream(new ByteArrayInputStream(PrivateKeyBase64.getBytes()), Base64.NO_WRAP));
+    private static boolean isWorking = false;
 
-            I2PServerSocket serverSocket = manager.getServerSocket();
+    private static I2PServer i2pServer = new I2PServer();
+    private static I2PClient i2pClient = new I2PClient();
 
-            I2PSession session = manager.getSession();
-            //Print the base64 string, the regular string would look like garbage.
+    public I2PConnector(){
+        i2pServer.start();
+        getMyAccount();
+    }
 
-           System.out.println(//"MyKey:"+PrivateKeyBase64+
-                    " getPrivateKey:"+session.getPrivateKey().toBase64()+"\n" +
-                            " getDecryptionKey:"+session.getDecryptionKey().toBase64()+"\n" +
-                            " getMyDestination:"+session.getMyDestination().toBase64());
+    public static void sendMessage(Message msg){
+        i2pClient.SendMsg(msg);
+    }
 
-            //The additional main method code comes here...
-        }catch (Exception e){
-            System.err.println(e.getMessage());
-        }
-    };
+    public static ArrayList<Message> getNewMessages(){
+        return i2pServer.getNewMessages();
+    }
+
+    public static boolean haveNewMessages(){
+        return i2pServer.haveNewMessages();
+    }
+
+    /*
+    Возвращает аккаунт пользователя или зависает, ожидая включения сервера.
+     */
+    public static Account getMyAccount() {
+        while(i2pServer.getMyDestination().isEmpty()){
+            try {
+                System.out.println("Ожидание включения сервера...");
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        Account account = new Account("My Account", i2pServer.getMyDestination());
+        return account;
+    }
+}
+
+class StartServer extends Thread {
+
+    StartServer(String name){
+        super(name);
+    }
+
+    public void run(){
+
+    }
 }

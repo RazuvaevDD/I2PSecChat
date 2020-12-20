@@ -119,6 +119,6 @@ Desktop/.externalNativeBuild
 Desktop/.cxx
 Desktop/.idea/vcs.xml
 
-# ignoring databases
-Desktop/src/sample/Database/sql_database/
-Desktop/src/sample/Database/sql_driver/
+
+# ignoring i2p account key dat file
+Desktop/src/sample/I2PConnector/key.dat
