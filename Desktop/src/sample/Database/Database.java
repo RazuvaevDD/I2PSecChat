@@ -196,6 +196,7 @@ public class Database {
                 user.add(result.getString("name"));
                 user.add(result.getString("private_key"));
                 user.add(result.getString("info"));
+                user.add(result.getBytes("picture"));
                 users.add(user);
             }
 
@@ -219,6 +220,7 @@ public class Database {
                 room.add(result.getString("info"));
                 room.add(result.getInt("delete_message_time"));
                 room.add(result.getString("aes_key"));
+                room.add(result.getBytes("picture"));
                 rooms.add(room);
             }
 
@@ -284,12 +286,12 @@ public class Database {
         }
     }
 
-    public void change_user_info(int user_id, String new_info) {
-        String change_user_info = "update user set info = ? where id = ?";
+    public void change_user_info(String table_name, int id, String new_info) {
+        String change_user_info = String.format("update %s set info = ? where id = ?", table_name);
         try (Connection connection = this.connect();
              PreparedStatement preparedStatement = connection.prepareStatement(change_user_info)) {
             preparedStatement.setString(1, new_info);
-            preparedStatement.setInt(2, user_id);
+            preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
