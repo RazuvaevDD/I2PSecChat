@@ -10,32 +10,33 @@ import sample.Database.Database;
 import sample.Encryptor.Encryptor;
 import sample.Encryptor.LoginData;
 import sample.I2PConnector.I2PConnector;
-import sample.Objects.Account;
-import sample.Objects.Message;
-import sample.Objects.TypeOfMessage;
+import sample.Objects.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import sample.Utils.Utils;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("gui/sample.fxml"));
-        primaryStage.setTitle("I2PSecChat");
+        Parent root = FXMLLoader.load(getClass().getResource("gui/fxml/LoginFrame.fxml"));
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("I2PSeсChat");
         primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
     }
 
     public static void main(String[] args) {
-
+        System.out.println(Utils.bytesToImagePath(null));
+//        ConfigParser configParser = new ConfigParser();
+//        System.out.println(configParser.getPassword());
 //        Database db = new Database();
 //        List<String> users = db.getUsersInRoom(1);
-//        System.out.println(users);
+
+
+//        Database db = new Database();
+
 
 //        LoginData data = new LoginData("Login", "Password");
 //        try {
@@ -44,8 +45,6 @@ public class Main extends Application {
 //        } catch (Exception e) {
 //            System.err.println(e.getMessage());
 //        }
-
-
 
         I2PConnector i2pConnector = new I2PConnector();
 
