@@ -6,14 +6,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #DEB887;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.gui.Controllers.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #DEB887;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.gui.LoginController">
     <children>
         <AnchorPane layoutY="73.0" prefHeight="327.0" prefWidth="600.0" style="-fx-background-color: #FFEBCD;">
             <children>
-                <Button fx:id="loginFrameSignIn" layoutX="196.0" layoutY="148.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="ВОЙТИ" />
+                <Button fx:id="loginFrameSignInButton" layoutX="196.0" layoutY="148.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="ВОЙТИ" />
                 <PasswordField fx:id="loginFramePasswordField" layoutX="195.0" layoutY="113.0" prefHeight="25.0" prefWidth="214.0" promptText="Пароль" />
-                <Text fx:id="IncorrID" fill="RED" layoutX="228.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User successfully registered!" visible="false" />
-                <Button layoutX="300.0" layoutY="148.0" mnemonicParsing="false" text="?" />
+                <Button fx:id="loginFrameHelpButton" layoutX="300.0" layoutY="148.0" mnemonicParsing="false" text="?" />
+            <Text fx:id="helpText" fill="#4a4a4a" layoutX="332.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Вы должны иметь пароль, что бы войти в систему. Если у вас его нет, обратитесь к вашему дистрибьютеру." visible="false" wrappingWidth="214.0" />
             </children>
         </AnchorPane>
         <Text fill="WHITE" layoutX="130.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="I2P Messenger">

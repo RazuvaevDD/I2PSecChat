@@ -15,7 +15,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("I2PSeсChat");
         primaryStage.setResizable(false);
-        //primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
     }
 
