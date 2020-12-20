@@ -5,6 +5,8 @@ import org.sqlite.SQLiteConfig;
 import java.io.*;
 import java.sql.*;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
 
@@ -297,15 +299,32 @@ public class Database {
     }
 
     public void update_picture(String table_name, int user_id, String filename) {
-        String change_user_info = String.format("update %s set picture = ? where id = ?", table_name);
+        String update_picture = String.format("update %s set picture = ? where id = ?", table_name);
         try (Connection connection = this.connect();
-             PreparedStatement preparedStatement = connection.prepareStatement(change_user_info)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(update_picture)) {
             preparedStatement.setBytes(1, readFile(filename));
             preparedStatement.setInt(2, user_id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<String> getUsersInRoom(int room_id) {
+        List<String> users_in_room = new ArrayList<>();
+        String get_users_in_room = String.format("select user.name from user, rooms where user.id = rooms.user_id and rooms.room_id = %x;", room_id);
+        try (Connection connection = this.connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_users_in_room)) {
+
+            while (result.next()) {
+                users_in_room.add(result.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return users_in_room;
     }
 
 }

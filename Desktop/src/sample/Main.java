@@ -11,6 +11,7 @@ import sample.Encryptor.Encryptor;
 import sample.Encryptor.LoginData;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 
 public class Main extends Application {
@@ -27,10 +28,8 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         Database db = new Database();
-//        db.create_all_tables();
-//        db.add_user("Ivanov Ivan", "key2", "info2", "D:\\Study\\CG\\CG_Lab2\\lLTEB.jpg");
-//        db.add_room("test", 5, "infa", "key", "D:\\Study\\CG\\CG_Lab2\\lLTEB.jpg");
-        db.print_all_tables();
+        List<String> users = db.getUsersInRoom(1);
+        System.out.println(users);
 
 //        LoginData data = new LoginData("Login", "Password");
 //        try {
