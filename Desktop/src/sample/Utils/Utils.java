@@ -1,10 +1,9 @@
-package sample.GUI_InfoShower;
+package sample.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -12,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class InfoShower {
+public class Utils {
 
     public static String getDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
@@ -20,7 +19,7 @@ public class InfoShower {
         return formatter.format(date);
     }
 
-    public static String bytesToImagePath(byte[] imageBytes) throws IOException {
+    public static String bytesToImagePath(byte[] imageBytes) {
         String currentDirectory = System.getProperty("user.dir");
         String resourcesPath = currentDirectory + "\\src\\sample\\gui\\resources\\";
         if (imageBytes == null) {
@@ -32,11 +31,30 @@ public class InfoShower {
         Graphics2D g2 = bi.createGraphics();
         g2.drawImage(img, 0, 0, null);
         g2.dispose();
-        byte[] array = new byte[7]; // length is bounded by 7
-        new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
+        String generatedString = getAlphaNumericString(10);
         String filePath = resourcesPath + generatedString + ".jpg";
-        ImageIO.write(bi, "jpg", new File(filePath));
+        try {
+            ImageIO.write(bi, "jpg", new File(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
         return filePath;
+    }
+
+    private static String getAlphaNumericString(int n)
+    {
+        // chose a Character random from this String
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" + "abcdefghijklmnopqrstuvxyz";
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(n);
+        for (int i = 0; i < n; i++) {
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        return sb.toString();
     }
 }

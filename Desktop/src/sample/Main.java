@@ -6,14 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import sample.Database.Database;
-import sample.Encryptor.Encryptor;
-import sample.Encryptor.LoginData;
-import sample.Config.ConfigParser;
-import sample.GUI_InfoShower.InfoShower;
-
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import sample.Utils.Utils;
 
 
 public class Main extends Application {
@@ -28,8 +21,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        InfoShower infoShower = new InfoShower();
-        System.out.println(infoShower.getDate());
+        System.out.println(Utils.bytesToImagePath(null));
 //        ConfigParser configParser = new ConfigParser();
 //        System.out.println(configParser.getPassword());
 //        Database db = new Database();
