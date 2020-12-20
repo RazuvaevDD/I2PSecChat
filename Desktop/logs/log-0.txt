@@ -1,0 +1,19 @@
+20.12.20 22:44:37 ERROR [ent Writer 1] i2p.client.I2PSessionMuxedImpl: [I2PSessionMuxedImpl #24790]: Error occurred communicating with router: Error writing out the message
+java.net.SocketException: Socket closed
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:118)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:155)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at net.i2p.client.ClientWriterRunner.run(ClientWriterRunner.java:91)
+	at java.lang.Thread.run(Thread.java:748)
+	at net.i2p.util.I2PThread.run(I2PThread.java:84)
+20.12.20 22:44:37 ERROR [Thread-2    ] eaming.I2PSocketManagerFactory: Error creating session for socket manager
+net.i2p.client.I2PSessionException: [I2PSessionMuxedImpl #24790]: Cannot connect to the router on 127.0.0.1:7654
+	at net.i2p.client.I2PSessionImpl.connect(I2PSessionImpl.java:544)
+	at net.i2p.client.streaming.I2PSocketManagerFactory.createManager(I2PSocketManagerFactory.java:229)
+	at net.i2p.client.streaming.I2PSocketManagerFactory.createManager(I2PSocketManagerFactory.java:151)
+	at net.i2p.client.streaming.I2PSocketManagerFactory.createManager(I2PSocketManagerFactory.java:116)
+	at sample.I2PConnector.I2PServer.run(I2PServer.java:56)
+Caused by: java.io.IOException: No tunnels built after waiting 5 minutes. Your network connection may be down, or there is severe network congestion.
+	at net.i2p.client.I2PSessionImpl.connect(I2PSessionImpl.java:521)
+	... 4 more
