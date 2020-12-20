@@ -84,7 +84,7 @@ Android/SecChat/lint/outputs/
 Android/SecChat/lint/tmp/
 # Android/SecChat/lint/reports/
 
-#from Android Project (with duplicate)
+# from Android Project (with duplicate)
 Android/SecChat/*.iml
 Android/SecChat/.gradle
 Android/SecChat/local.properties
@@ -100,3 +100,25 @@ Android/SecChat/captures
 Android/SecChat/.externalNativeBuild
 Android/SecChat/.cxx
 Android/SecChat/.idea/vcs.xml
+
+# for Desktop project
+Desktop/out/
+Desktop/*.iml
+Desktop/.gradle
+Desktop/local.properties
+Desktop/.idea/caches
+# Desktop/.idea/libraries
+Desktop/.idea/modules.xml
+Desktop/.idea/workspace.xml
+Desktop/.idea/navEditor.xml
+Desktop/.idea/assetWizardSettings.xml
+Desktop/.DS_Store
+Desktop/build
+Desktop/captures
+Desktop/.externalNativeBuild
+Desktop/.cxx
+Desktop/.idea/vcs.xml
+
+# ignoring databases
+Desktop/src/sample/Database/sql_database/
+Desktop/src/sample/Database/sql_driver/
