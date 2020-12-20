@@ -31,7 +31,8 @@ public class Main extends Application {
         List<String> users = db.getUsersInRoom(1);
 //        db.add_user("test", "test2", "infffa", "");
 //        db.add_room("test_room", 3, "infffa", "aes_key", "");
-        db.print_all_tables();
+        System.out.println(db.getAllUsers());
+        System.out.println(db.getAllRooms());
         System.out.println(db.get_id("user", "test"));
 //        db.create_all_tables();
 //        db.print_all_tables();

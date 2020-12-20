@@ -36,16 +36,15 @@ public class Database {
         create_message_table();
     }
 
-    public void print_all_tables() {
-        System.out.println("Users:");
-        print_users();
-        System.out.println("Rooms:");
-        print_rooms();
-        System.out.println("Users in rooms:");
-        print_rooms_users();
-        System.out.println("Messages");
-        print_messages();
-    }
+//    public void print_all_tables() {
+//        System.out.println("Users:");
+//        System.out.println("Rooms:");
+//        print_rooms();
+//        System.out.println("Users in rooms:");
+//        print_rooms_users();
+//        System.out.println("Messages");
+//        print_messages();
+//    }
 
     private void create_user_table() {
         String create_user_table = "create table if not exists `user` (\n"
@@ -183,41 +182,49 @@ public class Database {
         }
     }
 
-    private void print_users() {
+    public List<List<Object>> getAllUsers() {
+        List<List<Object>> users = new ArrayList<>();;
         String get_table_values = MessageFormat.format("select * from {0}", "user");
         try (Connection connection = this.connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
+            List<Object> user;
             while (result.next()) {
-                System.out.println(result.getInt("id") + "\t" +
-                        result.getString("name") + "\t" +
-                        result.getString("private_key") + "\t" +
-                        result.getString("info"));
+                user = new ArrayList<>();
+                user.add(result.getInt("id"));
+                user.add(result.getString("name"));
+                user.add(result.getString("private_key"));
+                user.add(result.getString("info"));
+                users.add(user);
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
+        } return  users;
     }
 
-    private void print_rooms() {
+    public List<List<Object>> getAllRooms() {
+        List<List<Object>> rooms = new ArrayList<>();;
         String get_table_values = MessageFormat.format("select * from {0}", "room");
         try (Connection connection = this.connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_table_values)) {
 
+            List<Object> room;
             while (result.next()) {
-                System.out.println(result.getInt("id") + "\t" +
-                        result.getString("name") + "\t" +
-                        result.getString("info") + "\t" +
-                        result.getInt("delete_message_time") + "\t" +
-                        result.getString("aes_key"));
+                room = new ArrayList<>();
+                room.add(result.getInt("id"));
+                room.add(result.getString("name"));
+                room.add(result.getString("info"));
+                room.add(result.getInt("delete_message_time"));
+                room.add(result.getString("aes_key"));
+                rooms.add(room);
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
+        } return  rooms;
     }
 
     private void print_messages() {
