@@ -1,23 +1,17 @@
 package sample.Encryptor;
 
-public class LoginData
-{
-    public LoginData(String login, String password)
-    {
+public class LoginData {
+    private final String login;
+    private final String password;
+
+    public LoginData(String login, String password) {
         this.login = login;
         this.password = password;
     }
 
-    public String getLogin()
-    {
-        return this.login;
-    }
+    public String getLogin() { return login; }
 
-    public String getPassword()
-    {
-        return this.password;
+    public String getPassword() {
+        return password;
     }
-
-    private static String login;
-    private static String password;
 }

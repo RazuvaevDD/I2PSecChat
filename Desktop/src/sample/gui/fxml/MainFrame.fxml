@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.gui.MainFrameController">
+    <children>
+        <SplitPane dividerPositions="0.24363233665559247, 0.6965669988925803" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <items>
+                <AnchorPane style="-fx-background-color: #FFEBCD;">
+                    <children>
+                        <Text fx:id="Username" layoutX="98.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Text>
+                        <Button fx:id="publicKeyButton" layoutX="98.0" layoutY="44.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="111.0" text="КЛЮЧ">
+                            <font>
+                                <Font size="10.0" />
+                            </font>
+                        </Button>
+                        <Separator layoutX="-38.0" layoutY="150.0" prefHeight="5.0" prefWidth="255.0" />
+                        <Label alignment="CENTER" layoutX="69.0" layoutY="114.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Комнаты" textAlignment="CENTER" wrapText="false">
+                            <font>
+                                <Font size="18.0" fx:id="x1" />
+                            </font>
+                            <textFill>
+                                <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
+                            </textFill>
+                        </Label>
+                        <Separator layoutX="-53.0" layoutY="105.0" prefWidth="270.0" />
+                        <ScrollPane fx:id="roomScrollPane" layoutX="11.0" layoutY="165.0" prefHeight="402.0" prefWidth="198.0">
+                            <content>
+                                <VBox fx:id="roomVBox" prefHeight="401.0" prefWidth="183.0" />
+                            </content>
+                        </ScrollPane>
+                        <ImageView fx:id="userAvatarImageView" fitHeight="80.0" fitWidth="80.0" layoutX="11.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="changeUserAvatarButton" layoutX="98.0" layoutY="73.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="111.0" text="ИЗМЕНИТЬ АВАТАР">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefHeight="576.0" prefWidth="379.0">
+                    <children>
+                        <TextField fx:id="messageTextField" layoutX="14.0" layoutY="533.0" prefHeight="35.0" prefWidth="284.0" />
+                        <Button fx:id="sendButton" layoutX="310.0" layoutY="539.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="74.0" text="ОТПРАВИТЬ">
+                            <font>
+                                <Font size="10.0" />
+                            </font>
+                        </Button>
+                        <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="505.0" prefWidth="370.0">
+                            <content>
+                                <VBox fx:id="messagesVBox" prefHeight="504.0" prefWidth="351.0" />
+                            </content></ScrollPane>
+                        <!--
+                        <Button layoutX="4.0" layoutY="534.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="33.0" text="Button">
+                            <effect>
+                                <ImageInput>
+                                    <source>
+                                        <Image url="resources/gear.png" />
+                                    </source>
+                                </ImageInput>
+                            </effect>
+                        </Button>
+                        -->
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefHeight="576.0" prefWidth="230.0" style="-fx-background-color: #FFEBCD;">
+                    <children>
+                        <Separator layoutX="-2.0" layoutY="98.0" prefHeight="5.0" prefWidth="273.0" />
+                        <Text fx:id = "roomName" layoutX="105.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RoomName">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Text>
+                        <Button fx:id="changeRoomAvatarButton" layoutX="16.0" layoutY="111.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ИЗМЕНИТЬ АВАТАР КОМНАТЫ">
+                            <font>
+                                <Font size="10.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="leaveRoomButton" layoutX="17.0" layoutY="144.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ВЫЙТИ ИЗ КОМНАТЫ">
+                            <font>
+                                <Font size="10.0" />
+                            </font>
+                        </Button>
+                        <Label alignment="CENTER" layoutX="86.0" layoutY="186.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Участники" textAlignment="CENTER" wrapText="false">
+                            <font>
+                                <Font size="18.0" fx:id="x12" />
+                            </font>
+                            <textFill>
+                                <Color blue="0.624" green="0.624" red="0.624" fx:id="x22" />
+                            </textFill>
+                        </Label>
+                        <Separator layoutX="-1.0" layoutY="223.0" prefHeight="5.0" prefWidth="271.0" />
+                        <Separator layoutY="178.0" prefWidth="270.0" />
+                        <ScrollPane fx:id="participantsScrollPane" layoutX="11.0" layoutY="244.0" prefHeight="320.0" prefWidth="249.0">
+                            <content>
+                                <VBox fx:id="participantsVBox" prefHeight="320.0" prefWidth="233.0" />
+                            </content>
+                        </ScrollPane>
+                        <ImageView fx:id="roomAvatarImageView" fitHeight="80.0" fitWidth="80.0" layoutX="10.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+        <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+            <children>
+                <Label fx:id="st" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Connected" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font size="11.0" fx:id="x3" />
+                    </font>
+                    <textFill>
+                        <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
+                    </textFill>
+                </Label>
+                <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+                <Label fx:id="timeText" font="$x3" maxWidth="-1.0" text="10.11.2020" textFill="$x4" HBox.hgrow="NEVER" />
+            </children>
+            <padding>
+                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+            </padding>
+        </HBox>
+    </children>
+</VBox>
