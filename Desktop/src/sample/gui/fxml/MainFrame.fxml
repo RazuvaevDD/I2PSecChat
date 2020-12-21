@@ -22,12 +22,12 @@
             <items>
                 <AnchorPane style="-fx-background-color: #FFEBCD;">
                     <children>
-                        <Text layoutX="98.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                        <Text fx:id="Username" layoutX="98.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Text>
-                        <Button fx:id="publicKeyButton" layoutX="98.0" layoutY="51.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="111.0" text="ПУБЛИЧНЫЙ КЛЮЧ">
+                        <Button fx:id="publicKeyButton" layoutX="98.0" layoutY="44.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="111.0" text="КЛЮЧ">
                             <font>
                                 <Font size="10.0" />
                             </font>
@@ -42,12 +42,17 @@
                             </textFill>
                         </Label>
                         <Separator layoutX="-53.0" layoutY="105.0" prefWidth="270.0" />
-                  <ScrollPane fx:id="roomScrollPane" layoutX="11.0" layoutY="165.0" prefHeight="402.0" prefWidth="198.0">
-                     <content>
-                        <VBox prefHeight="401.0" prefWidth="196.0" />
-                     </content>
-                  </ScrollPane>
-                  <ImageView fx:id="userAvatarImageView" fitHeight="80.0" fitWidth="80.0" layoutX="11.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+                        <ScrollPane fx:id="roomScrollPane" layoutX="11.0" layoutY="165.0" prefHeight="402.0" prefWidth="198.0">
+                            <content>
+                                <VBox fx:id="roomVBox" prefHeight="401.0" prefWidth="183.0" />
+                            </content>
+                        </ScrollPane>
+                        <ImageView fx:id="userAvatarImageView" fitHeight="80.0" fitWidth="80.0" layoutX="11.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="changeUserAvatarButton" layoutX="98.0" layoutY="73.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="111.0" text="ИЗМЕНИТЬ АВАТАР">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
                     </children>
                 </AnchorPane>
                 <AnchorPane prefHeight="576.0" prefWidth="379.0">
@@ -58,10 +63,10 @@
                                 <Font size="10.0" />
                             </font>
                         </Button>
-                  <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="505.0" prefWidth="370.0">
-                     <content>
-                        <VBox fx:id="messagesVBox" prefHeight="504.0" prefWidth="358.0" />
-                     </content></ScrollPane>
+                        <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="505.0" prefWidth="370.0">
+                            <content>
+                                <VBox fx:id="messagesVBox" prefHeight="504.0" prefWidth="351.0" />
+                            </content></ScrollPane>
                         <!--
                         <Button layoutX="4.0" layoutY="534.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="33.0" text="Button">
                             <effect>
@@ -78,7 +83,7 @@
                 <AnchorPane prefHeight="576.0" prefWidth="230.0" style="-fx-background-color: #FFEBCD;">
                     <children>
                         <Separator layoutX="-2.0" layoutY="98.0" prefHeight="5.0" prefWidth="273.0" />
-                        <Text layoutX="105.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RoomName">
+                        <Text fx:id = "roomName" layoutX="105.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RoomName">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
@@ -88,11 +93,11 @@
                                 <Font size="10.0" />
                             </font>
                         </Button>
-                  <Button fx:id="leaveRoomButton" layoutX="17.0" layoutY="144.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ВЫЙТИ ИЗ КОМНАТЫ">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Button>
+                        <Button fx:id="leaveRoomButton" layoutX="17.0" layoutY="144.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ВЫЙТИ ИЗ КОМНАТЫ">
+                            <font>
+                                <Font size="10.0" />
+                            </font>
+                        </Button>
                         <Label alignment="CENTER" layoutX="86.0" layoutY="186.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Участники" textAlignment="CENTER" wrapText="false">
                             <font>
                                 <Font size="18.0" fx:id="x12" />
@@ -103,12 +108,12 @@
                         </Label>
                         <Separator layoutX="-1.0" layoutY="223.0" prefHeight="5.0" prefWidth="271.0" />
                         <Separator layoutY="178.0" prefWidth="270.0" />
-                  <ScrollPane fx:id="participantsScrollPane" layoutX="11.0" layoutY="244.0" prefHeight="320.0" prefWidth="249.0">
-                     <content>
-                        <VBox prefHeight="306.0" prefWidth="248.0" />
-                     </content>
-                  </ScrollPane>
-                  <ImageView fx:id="roomAvatarImageView" fitHeight="80.0" fitWidth="80.0" layoutX="10.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
+                        <ScrollPane fx:id="participantsScrollPane" layoutX="11.0" layoutY="244.0" prefHeight="320.0" prefWidth="249.0">
+                            <content>
+                                <VBox fx:id="participantsVBox" prefHeight="320.0" prefWidth="233.0" />
+                            </content>
+                        </ScrollPane>
+                        <ImageView fx:id="roomAvatarImageView" fitHeight="80.0" fitWidth="80.0" layoutX="10.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
                     </children>
                 </AnchorPane>
             </items>
