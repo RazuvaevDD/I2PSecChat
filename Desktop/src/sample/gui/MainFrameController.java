@@ -24,6 +24,7 @@ import sample.Database.Database;
 import sample.I2PConnector.I2PConnector;
 import sample.Objects.Account;
 import sample.Objects.Message;
+import sample.Objects.Room;
 import sample.Objects.TypeOfMessage;
 import sample.Utils.Utils;
 
@@ -38,6 +39,11 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Objects;
+
+/**
+ * This class realizing controller for GUI of main frame.
+ * @author Vladimir Neizhko
+ **/
 
 public class MainFrameController {
 
@@ -84,157 +90,89 @@ public class MainFrameController {
     private VBox participantsVBox;
 
     private void changeRoomAvatar(String newRoomAvatar) {
-        Database.update_picture("room", 1, newRoomAvatar);
-        String path = "";
-        List<List<Object>> rooms = Database.getAllRooms();
-        for(int i = 0; i < rooms.size(); i++) {
-            if ((int)rooms.get(i).get(0) == 1){
-                path = Utils.bytesToImagePath((byte[])rooms.get(i).get(5));
-                break;
-            }
-        }
-
-        File file = new File(path);
-        Image roomAvatar = new Image(file.toURI().toString());
-        roomAvatarImageView.setImage(roomAvatar);
+        /**
+         * Method that changing avatar for current room.
+         * @param newRoomAvatar String with path to avatar in local file system.
+         **/
     }
 
     private void changeUserAvatar(String newUserAvatar) {
-        File file = new File(newUserAvatar);
-        Image roomAvatar = new Image(file.toURI().toString());
-        userAvatarImageView.setImage(roomAvatar);
+        /**
+         * Method that changing avatar for user.
+         * @param newUserAvatar String with path to avatar in local file system.
+         */
     }
 
     private void sendMessage(String userMessage) {
-        System.out.println("Button SEND was pressed");
-        if (!userMessage.equals("")) {
-            System.out.println("USER MESSAGE: " + userMessage);
-            Database.register_message(1, Database.get_id("user", I2PConnector.getMyAccount().name), userMessage, Utils.getDate());
-            //register_message(int room_id, int user_id, userMessage, utils.getDate())
-            messageTextField.setText("");
-            //Account levsAccount = new Account("Lev", "oyR5qzaIzmB3ZshG0HKU-kt-PvWuzd5~GAWystPHjQLulG68FWWHaoj7hjEPCxuRFFIohNvhrv09AzA3LI1qEshwwtblUgB4KHuotczooaOYb~T3w3R8lXHgYjVVZPtLV~RtqSFHPF7RGf1-GlfnDkRkiCTvfkIxWFskkzLL3WBMAq6c4m7zQJpgp6NqQ~Xxe8Rq6jnwKJM~Q6vZbXoQFtlz6INyJP9m1v--hZ8dez5LGiuASlItDhlmapJh6H3c5S-FssFlcM3VLGY7RL5pENENjtg08~eaEjrjZhG9ua3wRBTTrApDeIiOwGeZZwmGtYZLKv~5-eTUgJLbUoiucVly36J2it2GP9nhzg6taZNycYZ8xCS5gL49PFNT4UUfbclEOiS--phprFqY4tCTRvhraJU9nE6C6fupz6zWYtb8GkkSak4Mo3JTeKfSn5anpTG0hU1-T-bo5Fb6-wjGacUZnvS7Y9yQx1sUvncEoYXEIKotADfvbBRONSeyGhfVAQAvMToyMDoyMDEyMjA6Ojo4NTJjNzA3ZTMzODk5M2IxOmM1NzMyNGYxOTE2MDRiMTI=");
-            //Account danyasAccount = new Account("Danya", "Z0BTAJNKFiONfmeaMifz6IhpV9WIZgZ~7Fke0tr~GqZtcYdx7HuF~st5XDQavJvpEDbX-FOLuFgHojMJFwHhfILCLwB4WWD1ixMEppZA5QKKgsVKXeJsK~k8fFtaAqgUWZhFVt~pNGsMfuALYJ5LF8s2Mp7xksoh06jKK01BoWgnz6MDYX96fRm4813f6829yS7JLUSeFbdoFJSqni5IynEz30wACgDsSc35Y4c60RURwdfb4XDjU68JDSXVn1ryQ5s~Ep~GKYvyf8wq6JD5LqeCa9YaTluuOo~1LWg9O5-FQg0ghCsFSh8NonAu8JprdQxqExttBSHA98L~2RPYwQ1l~rlddnNH9Gov7m1T56MEu6Ls3G24ikgSv182XB8uU3YsjqnwSmAAY2WBgl2-7ZmHNjn~TqT~sdh0l9dipM3Ls4E4X0U2lA5ffOW4mbtd8iPM4z0IaOSsCMQfi5zw5tj4bxesaaKTMtLtbrq98JsGz2VJZl1j2CiTHn6TgI6HAQAvMToyMDoyMDEyMjA6OjpmNmNjZmE5NDAwYjBkZGIzOjUyYTFiY2MzYmRmODMzMmE=");
-
-            Account mySecondAccount = new Account("Me", "LZoOnzo4QKrES8tZVnZLk65lfGTFw0kE~WAea5NEWo-MXC2nAOYaybW3Vyj-sxp7u636rb8s3Yn7F13pd-j83V70TcT9cx01vsEScRnZrCDGbrX9KAy6o3f5uU-PHgXS0OcR66BNTj0O7JxT6zdC1zJNwTASCaMbK8TNUnqk8O7QJxArK~VbMfB-bgwmISPskBg4G8a9teujomtyw-m7weoUNUlnjvAoX7VJPw8UTIdEoZ3SrGVJggeO9su61eSok-317vUYQFZbNCAHw-Dy8XkRAqJnGpZ--AFQnf2cOst9rW5ixPxiJ0FdoZrRJK5plyN~s4GIJQt~yleAvKFzjFgW9ryOkGtrpJbmguDlgWCe1ccO7sGIir20kEsOS~xD6c-wJwV-vCAxtSbXsHt7gMyX~ih8kUL7-nBFZ-kV7pcfIdZidCwUuvQfg9ikQztz3rtVS58Dnt0wuW5Hn9lkwWORaZ4LOS2HSD6wpphSHqvulvovCjsPAJiUW3UPFYBDAQAvMToyMDoyMDEyMjE6OjpiYzc4MWFlYzBjYzNlMzAzOmE4ZDY5NjNkYzgzYWU2YzY=");
-
-            I2PConnector.sendMessage(new Message(I2PConnector.getMyAccount(),
-                    mySecondAccount,
-                    userMessage,
-                    TypeOfMessage.StringMessage));
-        }
+        /**
+         * Method that sending message to current room.
+         * @param userMessage String with message.
+         */
     }
 
-    private void fillMessages() {
-        messagesVBox.getChildren().clear();
-        List<List<String>> messagesList = Database.getMessagesInRoom(1);
-
-        for (int i = 0; i < messagesList.size(); i++) {
-            List<String> currentMessage = messagesList.get(i);
-            //TODO: add as message layout
-            Label label = new Label(currentMessage.get(0) + ": " + currentMessage.get(1));
-            label.setLayoutX(30);
-            messagesVBox.getChildren().add(label);
-        }
+    private void fillMessagesArea(List<Message> messagesList) {
+        /**
+         * Method filling GUI message area in current room with list of messages.
+         * @param messagesList List of Message objects.
+         */
     }
 
-    private void fillRooms() {
-        List<List<Object>> roomsList = Database.getAllRooms();
-
-        for (int i = 0; i < roomsList.size(); i++) {
-            List<Object> currentRoom = roomsList.get(i);
-            //TODO: add as button
-            Label label = new Label(currentRoom.get(1).toString());
-            roomVBox.getChildren().add(label);
-        }
+    private void fillRooms(List<Room> roomsList) {
+        /**
+         * Method filling GUI rooms area in UI with list of rooms.
+         * @param roomsList List of Room objects.
+         */
     }
 
-    private void fillParticipants() {
+    private void fillParticipants(List<Account> participantsList) {
+        /**
+         * Method filling GUI participants area in current room with list of participants.
+         * @param participantsList List of Account objects.
+         */
+    }
 
-        List<String> participantsList = Database.getUsersInRoom(1);
+    private void fillRoomAvatar(String roomAvatarPath) {
+        /**
+         * Method filling Avatar area of current room.
+         * @param roomAvatarPath String with path to avatar in local file system.
+         */
+    }
 
-        for (int i = 0; i < participantsList.size(); i++) {
-            Label label = new Label(participantsList.get(i));
-            participantsVBox.getChildren().add(label);
-        }
+    private void fillRoomName(String roomName) {
+        /**
+         * Method filling name of current room.
+         * @param roomName String with name of room.
+         */
+    }
+
+    void fillDate(String date) {
+        /**
+         * Method filling date in GUI.
+         * @param date String with current date.
+         */
     }
 
     @FXML
     void initialize() {
-        Username.setText(I2PConnector.getMyAccount().name);
-
-        fillMessages();
-        fillRooms();
-        fillParticipants();
-
-        timeText.setText(Utils.getDate());
-
-        File file = new File("./src/sample/gui/resources/userAvatar.jpg");
-        Image image = new Image(file.toURI().toString());
-        userAvatarImageView.setImage(image);
-
-        //avatar loading processing
-        String path = "";
-        List<List<Object>> rooms = Database.getAllRooms();
-        for(int i = 0; i < rooms.size(); i++) {
-            if ((int)rooms.get(i).get(0) == 1){
-                path = Utils.bytesToImagePath((byte[])rooms.get(i).get(5));
-                break;
-            }
-        }
-
-        file = new File(path);
-        Image roomAvatar = new Image(file.toURI().toString());
-        roomAvatarImageView.setImage(roomAvatar);
 
         sendButton.setOnAction(event -> {
-            sendMessage(messageTextField.getText());
-            fillMessages();
+            System.out.println("Button SEND was pressed");
         });
 
         publicKeyButton.setOnAction(event -> {
             System.out.println("Button KEY was pressed");
-            String destKey = I2PConnector.getMyAccount().destination;
-            StringSelection stringSelection = new StringSelection(destKey);
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection,stringSelection);
-
         });
 
         changeRoomAvatarButton.setOnAction(event -> {
             System.out.println("Button CHANGE ROOM AVATAR was pressed");
-
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Avatar");
-            FileChooser.ExtensionFilter extFilter =
-                    new FileChooser.ExtensionFilter("JPG", "*.jpg");
-            fileChooser.getExtensionFilters().add(extFilter);
-            Stage stage = new Stage();
-            File fileAva = fileChooser.showOpenDialog(stage);
-            if (fileAva != null) {
-                System.out.println("Opening file..." + fileAva.getPath());
-                changeRoomAvatar(fileAva.getPath());
-            }
         });
 
         changeUserAvatarButton.setOnAction(event -> {
             System.out.println("Button CHANGE USER AVATAR was pressed");
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Avatar");
-            FileChooser.ExtensionFilter extFilter =
-                    new FileChooser.ExtensionFilter("JPG", "*.jpg");
-            fileChooser.getExtensionFilters().add(extFilter);
-            Stage stage = new Stage();
-            File fileAva = fileChooser.showOpenDialog(stage);
-            if (fileAva != null) {
-                System.out.println("Opening file..." + fileAva.getPath());
-                changeUserAvatar(fileAva.getPath());
-            }
         });
 
         leaveRoomButton.setOnAction(event -> {
             System.out.println("Button LEAVE ROOM was pressed");
         });
-
     }
-
 }
