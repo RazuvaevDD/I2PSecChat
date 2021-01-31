@@ -72,6 +72,12 @@ public class MainFrameController {
     private Button leaveRoomButton;
 
     @FXML
+    private Button addParticipantButton;
+
+    @FXML
+    private Button createRoomButton;
+
+    @FXML
     private TextField messageTextField;
 
     @FXML
@@ -173,6 +179,14 @@ public class MainFrameController {
 
         leaveRoomButton.setOnAction(event -> {
             System.out.println("Button LEAVE ROOM was pressed");
+        });
+
+        addParticipantButton.setOnAction(event -> {
+            System.out.println("Button ADD PARTICIPANT was pressed");
+        });
+
+        createRoomButton.setOnAction(event -> {
+            System.out.println("Button CREATE ROOM was pressed");
         });
     }
 }
