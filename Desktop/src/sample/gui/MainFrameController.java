@@ -165,6 +165,7 @@ public class MainFrameController {
 
         fillDate(MainFrameLogic.getInstance().getDate());
 
+
         sendButton.setOnAction(event -> {
             System.out.println("Button SEND was pressed");
         });
