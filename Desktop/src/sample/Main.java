@@ -39,8 +39,8 @@ public class Main extends Application {
 //        I2PConnector i2pConnector = new I2PConnector();
 ////        System.out.println("Отправляем сообщение");
 ////        i2pConnector.sendMessage(new Message(
-////                i2pConnector.getMyAccount(),
-////                i2pConnector.getMyAccount(),
+////                i2pConnector.getMyAccount(), //sender
+////                i2pConnector.getMyAccount(), //customer
 ////                "testMsgFromClient", TypeOfMessage.StringMessage));
 //        System.out.println("Ждем пока что-то появится");
 //        // зависаем пока нет сообщений
