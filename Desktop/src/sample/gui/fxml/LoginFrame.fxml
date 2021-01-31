@@ -14,6 +14,7 @@
                 <PasswordField fx:id="loginFramePasswordField" layoutX="195.0" layoutY="113.0" prefHeight="25.0" prefWidth="214.0" promptText="Пароль" />
                 <Button fx:id="loginFrameHelpButton" layoutX="300.0" layoutY="148.0" mnemonicParsing="false" text="?" />
             <Text fx:id="helpText" fill="#4a4a4a" layoutX="332.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Вы должны иметь пароль, что бы войти в систему. Если у вас его нет, обратитесь к вашему дистрибьютеру." visible="false" wrappingWidth="214.0" />
+            <Text fx:id="incorrectPassword" fill="RED" layoutX="239.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Неправильный пароль" visible="false" />
             </children>
         </AnchorPane>
         <Text fill="WHITE" layoutX="130.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="I2P Messenger">
