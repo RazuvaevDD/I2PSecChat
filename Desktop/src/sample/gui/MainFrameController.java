@@ -98,68 +98,72 @@ public class MainFrameController {
     private void changeRoomAvatar(String newRoomAvatar) {
         /**
          * Method that changing avatar for current room.
-         * @param newRoomAvatar String with path to avatar in local file system.
+         * @param newRoomAvatar: String with path to avatar in local file system.
          **/
     }
 
     private void changeUserAvatar(String newUserAvatar) {
         /**
          * Method that changing avatar for user.
-         * @param newUserAvatar String with path to avatar in local file system.
+         * @param newUserAvatar: String with path to avatar in local file system.
          */
     }
 
     private void sendMessage(String userMessage) {
         /**
          * Method that sending message to current room.
-         * @param userMessage String with message.
+         * @param userMessage: String with message.
          */
     }
 
     private void fillMessagesArea(List<Message> messagesList) {
         /**
          * Method filling GUI message area in current room with list of messages.
-         * @param messagesList List of Message objects.
+         * @param messagesList: List of Message objects.
          */
     }
 
     private void fillRooms(List<Room> roomsList) {
         /**
          * Method filling GUI rooms area in UI with list of rooms.
-         * @param roomsList List of Room objects.
+         * @param roomsList: List of Room objects.
          */
     }
 
     private void fillParticipants(List<Account> participantsList) {
         /**
          * Method filling GUI participants area in current room with list of participants.
-         * @param participantsList List of Account objects.
+         * @param participantsList: List of Account objects.
          */
     }
 
     private void fillRoomAvatar(String roomAvatarPath) {
         /**
          * Method filling Avatar area of current room.
-         * @param roomAvatarPath String with path to avatar in local file system.
+         * @param roomAvatarPath: String with path to avatar in local file system.
          */
     }
 
     private void fillRoomName(String roomName) {
         /**
          * Method filling name of current room.
-         * @param roomName String with name of room.
+         * @param roomName: String with name of room.
          */
     }
 
     void fillDate(String date) {
         /**
          * Method filling date in GUI.
-         * @param date String with current date.
+         * @param date: String with current date.
          */
+
+        timeText.setText(date);
     }
 
     @FXML
     void initialize() {
+
+        fillDate(MainFrameLogic.getInstance().getDate());
 
         sendButton.setOnAction(event -> {
             System.out.println("Button SEND was pressed");
