@@ -13,12 +13,6 @@ import java.util.Random;
 
 public class Utils {
 
-    public static String getDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-        Date date = new Date();
-        return formatter.format(date);
-    }
-
     public static String bytesToImagePath(byte[] imageBytes) {
         String currentDirectory = System.getProperty("user.dir");
         String resourcesPath = currentDirectory + "\\src\\sample\\gui\\resources\\";
