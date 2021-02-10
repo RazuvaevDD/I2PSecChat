@@ -43,38 +43,38 @@ public class I2PServer extends Thread{
             String keyFilePath = dir + "\\src\\sample\\I2PConnector\\key.dat";
 
             if(!(new File(keyFilePath).exists())) { //если ключ не существует
-                System.out.println("Генерируем ключ...");
+                System.out.println("[INFO] I2PServer: Генерируем ключ...");
                 PrivateKeyFile.main(new String[]{"-h", keyFilePath});//генерируем
             }else{
-                System.out.println("Ключ найден!");
+                System.out.println("[INFO] I2PServer: Ключ найден!");
             }
 
             File file = new File(keyFilePath);
             InputStream inputStream = new FileInputStream(file);
 
-            System.out.println("Подключаемся к I2P...");
+            System.out.println("[INFO] I2PServer: Подключаемся к I2P...");
             I2PSocketManager manager = I2PSocketManagerFactory.createManager(inputStream);
 
             I2PServerSocket serverSocket = null;
             try{
                 serverSocket = manager.getServerSocket();
             }catch(Exception e){
-                System.err.println("Не удалось подключиться к I2P сети.\n" +
-                        "Проверьте статус I2P сети по адресу http://localhost:7657/home");
+                System.err.println("[CRITICAL ERROR] I2PServer: Не удалось подключиться к I2P сети.\n" +
+                                   "                 Проверьте статус I2P сети по адресу http://localhost:7657/home");
                 System.exit(0);
             }
 
             I2PSession session = manager.getSession();
             //Print the base64 string, the regular string would look like garbage.
             myDestination = session.getMyDestination().toBase64();
-            System.out.println("Destination = "+myDestination);
+            System.out.println("[INFO] I2PServer: Destination = " + myDestination);
 
 
             //Create socket to handle clients
             I2PThread t = new I2PThread(new ClientHandler(serverSocket));
             t.setName("clienthandler1");
             t.setDaemon(false);
-            System.out.println("Запуск сервера...");
+            System.out.println("[INFO] I2PServer: Запуск сервера...");
             t.start();
         }catch(Exception e){
             e.printStackTrace();
@@ -90,7 +90,7 @@ public class I2PServer extends Thread{
         }
 
         public void run() {
-            System.out.println("Сервер запущен!");
+            System.out.println("[INFO] I2PServer: Сервер запущен!");
             while(true) {
                 try {
                     I2PSocket sock = this.socket.accept();
@@ -100,18 +100,25 @@ public class I2PServer extends Thread{
                         String line = br.readLine();
                         if(line != null) {
                             String s[]; s = line.split("<<SYSTEM_X>>");
-                            messages.add(new Message(new Account("From", s[1]), new Account("To", myDestination), s[2], TypeOfMessage.values()[Integer.parseInt(s[0])]));
+                            messages.add(new Message(
+                                    new Account("From", s[1]),
+                                    new Account("To", myDestination),
+                                    s[2],
+                                    TypeOfMessage.values()[Integer.parseInt(s[0])],
+                                    s[3]
+                                    )
+                            );
                         }
                         sock.close();
                     }
                 } catch (I2PException ex) {
-                    System.out.println("General I2P exception!");
+                    System.out.println("[UNCRITICAL ERROR] I2PServer: Общее исключение I2P!");
                 } catch (ConnectException ex) {
-                    System.out.println("Error connecting!");
+                    System.out.println("[UNCRITICAL ERROR] I2PServer: Ошибка подключения!");
                 } catch (SocketTimeoutException ex) {
-                    System.out.println("Timeout!");
+                    System.out.println("[UNCRITICAL ERROR] I2PServer: Timeout!");
                 } catch (IOException ex) {
-                    System.out.println("General read/write-exception!");
+                    System.out.println("[UNCRITICAL ERROR] I2PServer: Общее исключение чтения/записи!");
                 }
             }
         }

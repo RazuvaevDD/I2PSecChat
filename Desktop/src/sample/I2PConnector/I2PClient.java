@@ -18,7 +18,7 @@ public class I2PClient {
 
     public static void SendMsg(Message msg){
         I2PSocketManager manager = I2PSocketManagerFactory.createManager();
-        System.out.println("Начало передачи сообщения клиентом...");
+        System.out.println("[INFO] I2PClient: Начало передачи сообщения клиентом...");
 
         String destinationString;
 
@@ -27,36 +27,37 @@ public class I2PClient {
         try {
             destination = new Destination(destinationString);
         } catch (DataFormatException ex) {
-            System.out.println("Destination string incorrectly formatted.");
+            System.err.println("[UNCRITICAL ERROR] I2PClient: Destination имеет неверный формат!");
             return;
         }
         I2PSocket socket;
         try {
             socket = manager.connect(destination);
         } catch (I2PException ex) {
-            System.out.println("General I2P exception occurred!");
+            System.err.println("[UNCRITICAL ERROR] I2PClient: Произошло общее исключение I2P! Сообщение не отправлено.");
             return;
         } catch (ConnectException ex) {
-            System.out.println("Failed to connect!");
+            System.err.println("[UNCRITICAL ERROR] I2PClient: Не удалось подключиться! Сообщение не отправлено.");
             return;
         } catch (NoRouteToHostException ex) {
-            System.out.println("Couldn't find host!");
+            System.err.println("[UNCRITICAL ERROR] I2PClient: Не удалось найти хост! Сообщение не отправлено.");
             return;
         } catch (InterruptedIOException ex) {
-            System.out.println("Sending/receiving was interrupted!");
+            System.err.println("[UNCRITICAL ERROR] I2PClient: Отправка/получение было прервано! Сообщение не отправлено.");
             return;
         }
         try {
             //Write to server
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            bw.write(msg.type.ordinal()+"<<SYSTEM_X>>" +msg.from.destination+"<<SYSTEM_X>>" + msg.message);
+            bw.write(msg.type.ordinal()+"<<SYSTEM_X>>" +msg.from.destination
+                    +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom);
             //Flush to make sure everything got sent
             bw.flush();
 
             socket.close();
-            System.out.println("Сообщение отправлено!");
+            System.out.println("[INFO] I2PClient: Сообщение отправлено!");
         } catch (IOException ex) {
-            System.out.println("Error occurred while sending/receiving!");
+            System.out.println("[UNCRITICAL ERROR] Ошибка при отправке сообщения. Сообщение не отправлено.");
         }
     }
 }
