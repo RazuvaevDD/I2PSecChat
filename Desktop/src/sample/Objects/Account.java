@@ -1,8 +1,8 @@
 package sample.Objects;
 
 public class Account {
-    public static String name;
-    public static String destination;
+    public String name;
+    public String destination;
 
     public Account() {
     }

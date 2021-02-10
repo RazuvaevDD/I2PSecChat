@@ -30,6 +30,16 @@ public class I2PConnector {
     }
 
     /*
+    Запускает клиент/сервер и дополнительные сервисы
+     */
+    public I2PConnector(TypeOfConnection connectionType){
+        this.connectionType = connectionType;
+        i2pServer.start();
+        Account myAccount = getMyAccount();
+        new HTTPService(myAccount);
+    }
+
+    /*
     Отправляет сообщение
      */
     public static void sendMessage(Message msg){
@@ -42,19 +52,7 @@ public class I2PConnector {
             t.start();
         }
         if(connectionType == TypeOfConnection.HTTPConnection){
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        HTTPService.SendMsg(msg);
-                    } catch (Exception e) {
-                        System.err.println("[WARN] HTTPService: Сообщение не доставлено. Причина: Внутренняя ошибка.");
-                        System.err.println("========СТЭК========");
-                        e.printStackTrace();
-                        System.err.println("====конец==стека====");
-                    }
-                }
-            });
-            t.start();
+            HTTPService.SendMsg(msg);
         }
     }
 

@@ -1,11 +1,11 @@
 package sample.Objects;
 
 public class Message {
-    public static Account from;
-    public static Account to;
-    public static String message;
-    public static TypeOfMessage type = TypeOfMessage.StringMessage;
-    public static String hashOfRoom = "";
+    public Account from;
+    public Account to;
+    public String message;
+    public TypeOfMessage type = TypeOfMessage.StringMessage;
+    public String hashOfRoom = "";
 
     public Message() {
     }

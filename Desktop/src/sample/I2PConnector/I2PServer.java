@@ -67,8 +67,6 @@ public class I2PServer extends Thread{
             I2PSession session = manager.getSession();
             //Print the base64 string, the regular string would look like garbage.
             myDestination = session.getMyDestination().toBase64();
-            System.out.println("[Debug] I2PServer: Destination = " + myDestination);
-
 
             //Create socket to handle clients
             I2PThread t = new I2PThread(new ClientHandler(serverSocket));
