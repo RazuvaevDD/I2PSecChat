@@ -67,7 +67,7 @@ public class I2PServer extends Thread{
             I2PSession session = manager.getSession();
             //Print the base64 string, the regular string would look like garbage.
             myDestination = session.getMyDestination().toBase64();
-            System.out.println("[INFO] I2PServer: Destination = " + myDestination);
+            System.out.println("[Debug] I2PServer: Destination = " + myDestination);
 
 
             //Create socket to handle clients
@@ -119,6 +119,9 @@ public class I2PServer extends Thread{
                     System.out.println("[UNCRITICAL ERROR] I2PServer: Timeout!");
                 } catch (IOException ex) {
                     System.out.println("[UNCRITICAL ERROR] I2PServer: Общее исключение чтения/записи!");
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    System.out.println("[UNCRITICAL ERROR] I2PServer: Получено сообщение неверного формата. " +
+                            "Сообщение было проигнорировано.");
                 }
             }
         }

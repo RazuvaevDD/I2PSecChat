@@ -16,8 +16,8 @@ public class I2PConnector {
     /*
     Устанавливает тип соединения, которое используется для работы модуля
      */
-    public void setConnectionType(TypeOfConnection connectionType){
-        this.connectionType = connectionType;
+    public static void setConnectionType(TypeOfConnection connectionType){
+        I2PConnector.connectionType = connectionType;
     }
 
     /*
