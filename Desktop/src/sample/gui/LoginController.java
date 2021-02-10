@@ -29,7 +29,7 @@ public class LoginController {
     private Text helpText;
 
     @FXML
-    private VBox messagesVBox;
+    private Text incorrectPassword;
 
     private String passwordForCheck = "admin";
 
@@ -73,6 +73,9 @@ public class LoginController {
                 stage.setScene(new Scene(root));
                 stage.setTitle("I2PSeсChat");
                 stage.showAndWait();
+            } else {
+                incorrectPassword.setVisible(true);
+                loginFramePasswordField.setText(null);
             }
         });
     }
