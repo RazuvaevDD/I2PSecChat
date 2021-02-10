@@ -5,7 +5,7 @@ public class Message {
     public Account to;
     public String message;
     public TypeOfMessage type = TypeOfMessage.StringMessage;
-    public String hashOfRoom = "";
+    public String hashOfRoom = "RoomHash";
 
     public Message() {
     }
@@ -22,6 +22,10 @@ public class Message {
         this.to = to;
         this.message = message;
         this.type = type;
+        if (hashOfRoom.isEmpty()){
+            System.err.println("[CRITICAL ERROR]: Message object не может иметь совершенно пустой хэш комнаты!");
+            System.exit(-1);
+        }
         this.hashOfRoom = hashOfRoom;
     }
 }

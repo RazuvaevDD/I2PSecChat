@@ -24,7 +24,7 @@ public class HTTPService {
 
     public static ArrayList<Message> getNewMessages() {
         ArrayList<Message> messages = new ArrayList();
-        System.err.println("[INFO] HTTPService: Получение сообщений...");
+        System.out.println("[INFO] HTTPService: Получение сообщений...");
         try {
             URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
             URLConnection con = url.openConnection();
@@ -54,6 +54,7 @@ public class HTTPService {
 
             JSONParser parser = new JSONParser();
             JSONArray jsonArray = (JSONArray) parser.parse(reader);
+
             Iterator<String> iterator = jsonArray.iterator();
             while (iterator.hasNext()) {
                 String s[]; s = iterator.next().split("<<SYSTEM_X>>");
@@ -67,9 +68,9 @@ public class HTTPService {
                 );
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             //e.getMessage().contains(substring)
-            System.err.println("[WARN] HTTPService: Сообщения не получены. Причина: Внутренняя ошибка.");
+            System.err.println("[UNCRITICAL ERROR] HTTPService: Сообщения не получены. Причина: Внутренняя ошибка.");
             System.err.println("========СТЭК========");
             e.printStackTrace();
             System.err.println("====конец==стека====");
@@ -78,7 +79,7 @@ public class HTTPService {
     }
 
     public static void SendMsg(Message msg) {
-        System.err.println("[INFO] HTTPService: Отправка сообщения...");
+        System.out.println("[INFO] HTTPService: Отправка сообщения...");
         try{
             String msgStr = msg.type.ordinal()+"<<SYSTEM_X>>" +msg.from.destination
                     +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom;
@@ -108,7 +109,7 @@ public class HTTPService {
             }
             System.out.println("[INFO] HTTPService: Сообщение успешно отправлено.");
         } catch (Exception e) {
-            System.err.println("[WARN] HTTPService: Сообщение не отправлено. Причина: Внутренняя ошибка.");
+            System.err.println("[UNCRITICAL ERROR] HTTPService: Сообщение не отправлено. Причина: Внутренняя ошибка.");
             System.err.println("========СТЭК========");
             e.printStackTrace();
             System.err.println("====конец==стека====");
@@ -116,7 +117,7 @@ public class HTTPService {
     }
 
     public static boolean haveNewMessages() {
-        System.err.println("[INFO] HTTPService: Проверка наличия сообщений...");
+        System.out.println("[INFO] HTTPService: Проверка наличия сообщений...");
         try {
             URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
             URLConnection con = url.openConnection();
@@ -155,12 +156,12 @@ public class HTTPService {
             }
 
         }catch (Exception e) {
-            System.err.println("[WARN] HTTPService: Проверка завершилась неудачно. Причина: Внутренняя ошибка.");
+            System.err.println("[UNCRITICAL ERROR] HTTPService: Проверка завершилась неудачно. Причина: Внутренняя ошибка.");
             System.err.println("========СТЭК========");
             e.printStackTrace();
             System.err.println("====конец==стека====");
         }
-        System.err.println("[WARN] HTTPService: Возвращено false.");
+        System.err.println("[WARN] HTTPService: haveNewMessages(): Возвращено false.");
         return false;
     }
 }

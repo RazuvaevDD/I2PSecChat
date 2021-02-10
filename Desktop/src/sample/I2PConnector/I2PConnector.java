@@ -86,7 +86,7 @@ public class I2PConnector {
     public static Account getMyAccount() {
         while(i2pServer.getMyDestination().isEmpty()){
             try {
-                System.out.println("[INFO] I2PConnector: Ожидание включения сервера...");
+                System.out.println("[INFO] I2PConnector: Ожидание выделения I2P адреса...");
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
