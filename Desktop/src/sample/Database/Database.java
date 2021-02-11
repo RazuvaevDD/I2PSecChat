@@ -83,6 +83,7 @@ public class Database {
         String create_rooms_table = "create table if not exists `rooms` (\n"
                 + "`room_id` int not null,\n"
                 + "`user_id` int not null,\n"
+                + "unique (`room_id`, `user_id`),\n"
                 + "constraint `fk_room_id` foreign key (`room_id`) references `room` (`id`) on delete cascade on update cascade,\n"
                 + "constraint `fk_user_id`foreign key (`user_id`) references `user` (`id`) on delete cascade on update cascade\n"
                 + ");";
@@ -351,6 +352,23 @@ public class Database {
             System.out.println(e.getMessage());
         }
         return users_in_room;
+    }
+
+    public static List<String> getUserRooms(int user_id) {
+        List<String> user_rooms = new ArrayList<>();
+        String get_user_rooms = String.format("select room.name from room, rooms where room.id = rooms.room_id and rooms.user_id = %x;", user_id);
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_user_rooms)) {
+
+            while (result.next()) {
+                user_rooms.add(result.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user_rooms;
     }
 
     public static List<List<String>> getMessagesInRoom(int room_id) {
