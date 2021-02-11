@@ -2,7 +2,7 @@ package sample.Objects;
 
 public class Account {
     public String name;
-    public String destination;
+    public String destination; // What the f*** is destination?? ?? ? ? ? ? ? ?
 
     public Account() {
     }
