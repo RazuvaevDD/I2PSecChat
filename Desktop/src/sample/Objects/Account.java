@@ -1,8 +1,8 @@
 package sample.Objects;
 
 public class Account {
-    public String name;
-    public String destination;
+    public String name;         // имя контакта
+    public String destination;  // i2p адрес контакта (это как статичный ip в стеке tcp/ip)
 
     public Account() {
     }

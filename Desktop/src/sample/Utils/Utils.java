@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import sample.Config.ConfigParser;
 
 public class Utils {
 
@@ -36,6 +37,11 @@ public class Utils {
         return filePath;
     }
 
+    public static boolean isPasswordCorrect(String password)
+    {
+        return ConfigParser.getPassword().equals(password);
+    }
+
     private static String getAlphaNumericString(int n)
     {
         // chose a Character random from this String
@@ -51,4 +57,5 @@ public class Utils {
         }
         return sb.toString();
     }
+
 }

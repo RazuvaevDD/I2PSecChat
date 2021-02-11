@@ -1,16 +1,22 @@
 package sample.gui;
 
+import javafx.scene.image.Image;
 import sample.Objects.Account;
 import sample.Objects.Message;
 import sample.Objects.Room;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import sample.Database.Database;
+import sample.Utils.Utils;
+
 /**
  * This class realizing logic of interacting with GUI.
- * @author Rustam Almukhametov
- * @author Vladimir Neizhko
+ * @author Lev Averin
  **/
 
 public class MainFrameLogic {
@@ -65,22 +71,37 @@ public class MainFrameLogic {
         return currentRoom;
     }
 
-    protected List<Message> getMessagesList() {
+    public List<Message> getMessagesList(int room_id) {
         /**
          * Function that returns messages for current room.
          * TODO: Maybe we should find out how to protect this method from unauthorized access to hidden rooms.
          *       Hint: you can check is current user are participant of room from parameter.
          * @return List of Message object.
          */
+        List<List<String>> messages = Database.getMessagesInRoom(room_id);
+
         return null;
     }
 
-    protected List<Room> getRoomsList() {
+    public List<Room> getRoomsList() {
         /**
          * Function that returns list of rooms for current user.
          * @return List of Room object.
          */
-        return null;
+        List<List<Object>> allRooms = Database.getAllRooms();
+        List<Room> roomList = new ArrayList<>();
+        for (int i = 0; i < allRooms.size(); i++) {
+            String filepath = "";
+            try {
+                filepath = allRooms.get(i).get(5).toString();
+            }
+            catch(NullPointerException e) {
+                filepath = "";
+            }
+            roomList.add(new Room((int)allRooms.get(i).get(0), allRooms.get(i).get(1).toString(), allRooms.get(i).get(2).toString(), (int)allRooms.get(i).get(3), allRooms.get(i).get(4).toString(), filepath));
+            System.out.println(i);
+        }
+        return roomList;
     }
 
     protected List<Account> getParticipantsList() {
@@ -125,13 +146,17 @@ public class MainFrameLogic {
          * Method that adds messages to database.
          * @param message String with text of message.
          */
+        //int room_id = 0;
+        //int user_id = 0;
+        //Database.register_message(room_id, user_id, message, this.getDate());
     }
 
-    protected void addNewRoom(Room room) {
+    public void addNewRoom(Room room) {
         /**
          * Method that adds room to database.
          * @param room Room object.
          */
+        Database.add_room(room.getName(), room.getDeleteMessageTime(), room.getInfo(), room.getAESKey(), room.getFilepath());
     }
 
     protected void addNewMember(Account account) {
@@ -147,6 +172,20 @@ public class MainFrameLogic {
          * Method that adds room avatar path to the database.
          * @param roomAvatarPath String object.
          */
+        Database.update_picture("room", 1, roomAvatarPath);
+        String path = "";
+        List<List<Object>> rooms = Database.getAllRooms();
+        for(int i = 0; i < rooms.size(); i++) {
+            if ((int)rooms.get(i).get(0) == 1){
+                path = Utils.bytesToImagePath((byte[])rooms.get(i).get(5));
+                break;
+            }
+        }
+
+        File file = new File(path);
+        Image roomAvatar = new Image(file.toURI().toString());
+        //roomAvatarImageView.setImage(roomAvatar);
+        /** PLZ DO SOMETHING ABOUT !!!**/
     }
 
     @Deprecated
@@ -155,5 +194,6 @@ public class MainFrameLogic {
          * Method that adds user avatar path to the database.
          * @param userAvatarPath String object.
          */
+
     }
 }
