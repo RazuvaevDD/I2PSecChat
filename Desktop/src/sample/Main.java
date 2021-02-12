@@ -13,6 +13,9 @@ import sample.Objects.*;
 import sample.Config.ConfigParser;
 import sample.gui.MainFrameLogic;
 
+import javax.xml.crypto.Data;
+import java.util.List;
+
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -47,21 +50,20 @@ public class Main extends Application {
             }
         }
         System.out.println(I2PConnector.getNewMessages().get(0).message);*/
-
-        //Database.create_all_tables();
-        //Database.add_user("Andrey Dolmatov", "key", "", "");
-        //Database.add_user("Elena Kurbatova", "key2", "", "");
+//
+//        Database.create_all_tables();
+//        Database.add_user("Andrey Dolmatov", "key", "", "");
+//        Database.add_user("Elena Kurbatova", "key2", "", "");
 //        Database.add_room("Facility", 5, "String info", "Stringaes_key", "");
-//        Database.add_room("Gay chat", 5, "String info", "Stringaes_key", "");
-//        Database.add_room("E-FGM", 5, "String info", "Stringaes_key", "");
-//        Database.add_user_to_room(0, 1);
-//        Database.add_user_to_room(0, 2);
-//        Database.add_user_to_room(1, 0);
+//        Database.add_room("Gay chat", 5, "String info", "Strddingaes_key", "");
+//        Database.add_room("E-FGM", 5, "String info", "Stringdddaes_key", "");
 //        Database.add_user_to_room(1, 1);
+//        Database.add_user_to_room(1, 2);
+//        Database.add_user_to_room(2, 1);
+//        Database.add_user_to_room(3, 2);
 //        Database.add_user(I2PConnector.getMyAccount().name, "KEY", "I love k", "");
 //        System.out.println(I2PConnector.getMyAccount().name);
-        MainFrameLogic mfl = MainFrameLogic.getInstance();
-        System.out.println(mfl.getRoomsList().get(0).name);
+
         //System.out.println(Utils.isPasswordCorrect("admin"));
         launch(args);
     }
