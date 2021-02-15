@@ -63,7 +63,8 @@ public class HTTPService {
                                 new Account("To", myAccount.destination),
                                 s[2],
                                 TypeOfMessage.values()[Integer.parseInt(s[0])],
-                                s[3]
+                                s[3],
+                                ""
                         )
                 );
             }

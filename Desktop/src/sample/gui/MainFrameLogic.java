@@ -1,6 +1,7 @@
 package sample.gui;
 
 import javafx.scene.image.Image;
+import sample.I2PConnector.I2PConnector;
 import sample.Objects.Account;
 import sample.Objects.Message;
 import sample.Objects.Room;
@@ -95,7 +96,7 @@ public class MainFrameLogic {
                     }
                 }
             }
-            messagesList.add(new Message(new Account(message.get(0).toString(), message.get(1).toString()), new Account(receiverName, receiverDestination), message.get(6).toString(), TypeOfMessage.StringMessage, message.get(3).toString() ,message.get(7)));
+            messagesList.add(new Message(new Account(message.get(0).toString(), message.get(1).toString()), new Account(receiverName, receiverDestination), message.get(6).toString(), TypeOfMessage.StringMessage, message.get(3).toString() ,message.get(7).toString()));
         }
         return messagesList;
     }
@@ -121,15 +122,20 @@ public class MainFrameLogic {
         return roomList;
     }
 
-    protected List<Account> getParticipantsList() {
+    protected List<Account> getParticipantsList(int room_id) {
         /**
          * Function that returns participants of current room.
          * @return List of Account objects.
          */
-        return null;
+        List<List<Object>> usersInRoom = Database.getUsersInRoom(room_id);
+        List<Account> participantsList = new ArrayList<>();
+        for (List<Object> user: usersInRoom) {
+            participantsList.add(new Account(user.get(1).toString(), user.get(3).toString()));
+        }
+        return participantsList;
     }
 
-    protected List<Account> getContactsList() {
+    public List<Account> getContactsList(int user_id) {
         /**
          * Function that returns contacts of user.
          * @return List of Account objects.
@@ -137,7 +143,20 @@ public class MainFrameLogic {
          *      It means that we should find out how to get contacts personal for logged user.
          *      There is shouldn't be any ways to get contacts of another user.
          */
-        return null;
+        List<List<Object>> allUsers = Database.getAllUsers();
+        List<String> userContacts = Database.getUsersContacts(user_id);
+        List<Account> contactsList = new ArrayList<>();
+        String userPublicKey = "";
+        for (String contact: userContacts) {
+            for (List<Object> user: allUsers) {
+                if (contact.equals(user.get(1).toString())) {
+                    userPublicKey = user.get(3).toString();
+                    break;
+                }
+            }
+            contactsList.add(new Account(contact, userPublicKey));
+        }
+        return contactsList;
     }
 
     protected String getPublicKey() {
@@ -145,7 +164,7 @@ public class MainFrameLogic {
          * Function that returns Public Key of user.
          * @return public key as String.
          */
-        return null;
+        return I2PConnector.getMyAccount().destination;
     }
 
     protected String getDate() {
@@ -158,14 +177,12 @@ public class MainFrameLogic {
         return formatter.format(date);
     }
 
-    protected void addNewMessage(String message) {
+    protected void addNewMessage(String message, int room_id, String hash, int sender_id, int receiver_id) {
         /**
          * Method that adds messages to database.
          * @param message String with text of message.
          */
-        //int room_id = 0;
-        //int user_id = 0;
-        //Database.register_message(room_id, user_id, message, this.getDate());
+        Database.register_message(room_id, hash, sender_id, receiver_id, message, getDate());
     }
 
     public void addNewRoom(Room room) {
@@ -173,18 +190,19 @@ public class MainFrameLogic {
          * Method that adds room to database.
          * @param room Room object.
          */
-//        Database.add_room(room.getName(), room.getDeleteMessageTime(), room.getInfo(), room.getAESKey(), room.getFilepath());
+        Database.add_room(room.getName(), room.getDeleteMessageTime(), room.getInfo(), room.getAESKey(), room.getAESKey(), room.getFilepath());
     }
 
-    protected void addNewMember(Account account) {
+    protected void addNewMember(Account account, int room_id, int user_id) {
         /**
          * Method that adds new member to current room.
          * @param account Account object that will be added to room.
          */
+        Database.add_user_to_room(room_id, user_id);
     }
 
     @Deprecated
-    protected void setRoomAvatarPath(String roomAvatarPath) {
+    protected void setRoomAvatarPath(String roomAvatarPath, int room_id) {
         /**
          * Method that adds room avatar path to the database.
          * @param roomAvatarPath String object.
@@ -193,8 +211,8 @@ public class MainFrameLogic {
         String path = "";
         List<List<Object>> rooms = Database.getAllRooms();
         for(int i = 0; i < rooms.size(); i++) {
-            if ((int)rooms.get(i).get(0) == 1){
-                path = Utils.bytesToImagePath((byte[])rooms.get(i).get(5));
+            if ((int)rooms.get(i).get(0) == room_id){
+                path = Utils.bytesToImagePath((byte[])rooms.get(i).get(6));
                 break;
             }
         }
@@ -206,11 +224,24 @@ public class MainFrameLogic {
     }
 
     @Deprecated
-    protected void setUserAvatarPath(String userAvatarPath) {
+    protected void setUserAvatarPath(String userAvatarPath, int user_id) {
         /**
          * Method that adds user avatar path to the database.
          * @param userAvatarPath String object.
          */
+        Database.update_picture("user", 1, userAvatarPath);
+        String path = "";
+        List<List<Object>> users = Database.getAllUsers();
+        for(int i = 0; i < users.size(); i++) {
+            if ((int)users.get(i).get(0) == user_id){
+                path = Utils.bytesToImagePath((byte[])users.get(i).get(5));
+                break;
+            }
+        }
 
+        File file = new File(path);
+        Image userAvatar = new Image(file.toURI().toString());
+        //roomAvatarImageView.setImage(roomAvatar);
+        /** PLZ DO SOMETHING ABOUT !!!**/
     }
 }

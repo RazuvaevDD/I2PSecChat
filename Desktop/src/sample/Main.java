@@ -82,6 +82,13 @@ public class Main extends Application {
 //        Database.register_message(2, "hash1", 2, 1, "ffdfdhi", "fdfs");
 
         //System.out.println(Utils.isPasswordCorrect("admin"));
+        MainFrameLogic mfl = MainFrameLogic.getInstance();
+
+        //System.out.println(mfl.getMessagesList(1));
+        for (Message msg : mfl.getMessagesList(1)) {
+            System.out.print(msg.from.destination);
+            System.out.println();
+        }
         launch(args);
     }
 }
