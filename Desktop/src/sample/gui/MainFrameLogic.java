@@ -78,7 +78,7 @@ public class MainFrameLogic {
          *       Hint: you can check is current user are participant of room from parameter.
          * @return List of Message object.
          */
-        List<List<String>> messages = Database.getMessagesInRoom(room_id);
+//        List<List<String>> messages = Database.getMessagesInRoom(room_id);
 
         return null;
     }
@@ -156,7 +156,7 @@ public class MainFrameLogic {
          * Method that adds room to database.
          * @param room Room object.
          */
-        Database.add_room(room.getName(), room.getDeleteMessageTime(), room.getInfo(), room.getAESKey(), room.getFilepath());
+//        Database.add_room(room.getName(), room.getDeleteMessageTime(), room.getInfo(), room.getAESKey(), room.getFilepath());
     }
 
     protected void addNewMember(Account account) {
