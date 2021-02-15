@@ -74,6 +74,7 @@ public class Main extends Application {
             System.out.print(t.get(4));
             System.out.print(t.get(5));
             System.out.print(t.get(6));
+            System.out.print(t.get(7));
             System.out.println();
         }
 

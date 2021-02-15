@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import sample.Objects.Account;
 import sample.Objects.Message;
 import sample.Objects.Room;
+import sample.Objects.TypeOfMessage;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,8 @@ import java.util.List;
 
 import sample.Database.Database;
 import sample.Utils.Utils;
+
+import javax.xml.crypto.Data;
 
 /**
  * This class realizing logic of interacting with GUI.
@@ -78,9 +81,23 @@ public class MainFrameLogic {
          *       Hint: you can check is current user are participant of room from parameter.
          * @return List of Message object.
          */
-//        List<List<String>> messages = Database.getMessagesInRoom(room_id);
-
-        return null;
+        List<List<Object>> messages = Database.getMessagesInRoom(room_id);
+        List<Message> messagesList = new ArrayList<>();
+        List<List<Object>> allUsers = Database.getAllUsers();
+        for (List<Object> message : messages) {
+            String receiverName = null;
+            String receiverDestination = null;
+            if ((int)message.get(5) != 0) {
+                for (List<Object> user : allUsers) {
+                    if (message.get(5) == user.get(0)) {
+                        receiverName = user.get(1).toString();
+                        receiverDestination = user.get(3).toString();
+                    }
+                }
+            }
+            messagesList.add(new Message(new Account(message.get(0).toString(), message.get(1).toString()), new Account(receiverName, receiverDestination), message.get(6).toString(), TypeOfMessage.StringMessage, message.get(3).toString() ,message.get(7)));
+        }
+        return messagesList;
     }
 
     public List<Room> getRoomsList() {

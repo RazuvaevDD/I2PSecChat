@@ -6,6 +6,7 @@ public class Message {
     public String message;
     public TypeOfMessage type = TypeOfMessage.StringMessage;
     public String hashOfRoom = "RoomHash";
+    public String time;
 
     public Message() {
     }
@@ -17,7 +18,7 @@ public class Message {
         this.type = type;
     }
 
-    public Message(Account from, Account to, String message, TypeOfMessage type, String hashOfRoom) {
+    public Message(Account from, Account to, String message, TypeOfMessage type, String hashOfRoom, String time) {
         this.from = from;
         this.to = to;
         this.message = message;
@@ -27,5 +28,6 @@ public class Message {
             System.exit(-1);
         }
         this.hashOfRoom = hashOfRoom;
+        this.time = time;
     }
 }
