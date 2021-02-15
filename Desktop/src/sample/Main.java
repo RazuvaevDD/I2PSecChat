@@ -52,17 +52,33 @@ public class Main extends Application {
         System.out.println(I2PConnector.getNewMessages().get(0).message);*/
 //
 //        Database.create_all_tables();
-//        Database.add_user("Andrey Dolmatov", "key", "", "");
-//        Database.add_user("Elena Kurbatova", "key2", "", "");
-//        Database.add_room("Facility", 5, "String info", "Stringaes_key", "");
-//        Database.add_room("Gay chat", 5, "String info", "Strddingaes_key", "");
-//        Database.add_room("E-FGM", 5, "String info", "Stringdddaes_key", "");
+//        Database.add_user("Andrey Dolmatov", "private_key1", "public_key1", "", "");
+//        Database.add_user("Elena Kurbatova", "private_key2", "public_key2", "", "");
+//        Database.add_room("Facility", 5, "String info", "Stringaes_key", "hash1", "");
+//        Database.add_room("Gay chat", 5, "String info2", "Stringaes_key2", "hash2", "");
+//        Database.add_room("E-FGM", 5, "String info3", "Stringaes_key3", "hash3", "");
 //        Database.add_user_to_room(1, 1);
 //        Database.add_user_to_room(1, 2);
 //        Database.add_user_to_room(2, 1);
 //        Database.add_user_to_room(3, 2);
+//        Database.add_new_contact(2, 1);
 //        Database.add_user(I2PConnector.getMyAccount().name, "KEY", "I love k", "");
 //        System.out.println(I2PConnector.getMyAccount().name);
+
+        List<List<Object>> test = Database.getMessagesInRoom(1);
+        for (List<Object> t : test) {
+            System.out.print(t.get(0));
+            System.out.print(t.get(1));
+            System.out.print(t.get(2));
+            System.out.print(t.get(3));
+            System.out.print(t.get(4));
+            System.out.print(t.get(5));
+            System.out.print(t.get(6));
+            System.out.println();
+        }
+
+//        Database.register_message(2, "hash1", 1, 2, "hifff", "fdfs");
+//        Database.register_message(2, "hash1", 2, 1, "ffdfdhi", "fdfs");
 
         //System.out.println(Utils.isPasswordCorrect("admin"));
         launch(args);
