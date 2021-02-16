@@ -18,6 +18,19 @@ public class Message {
         this.type = type;
     }
 
+    public Message(Account from, Account to, String message, TypeOfMessage type, String hashOfRoom) {
+        this.from = from;
+        this.to = to;
+        this.message = message;
+        this.type = type;
+        if (hashOfRoom.isEmpty()){
+            System.err.println("[CRITICAL ERROR]: Message object не может иметь совершенно пустой хэш комнаты!");
+            System.exit(-1);
+        }
+        this.hashOfRoom = hashOfRoom;
+        this.time = "";
+    }
+
     public Message(Account from, Account to, String message, TypeOfMessage type, String hashOfRoom, String time) {
         this.from = from;
         this.to = to;
