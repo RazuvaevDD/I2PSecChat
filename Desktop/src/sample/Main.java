@@ -74,6 +74,7 @@ public class Main extends Application {
             System.out.print(t.get(4));
             System.out.print(t.get(5));
             System.out.print(t.get(6));
+            System.out.print(t.get(7));
             System.out.println();
         }
 
@@ -81,6 +82,13 @@ public class Main extends Application {
 //        Database.register_message(2, "hash1", 2, 1, "ffdfdhi", "fdfs");
 
         //System.out.println(Utils.isPasswordCorrect("admin"));
+        MainFrameLogic mfl = MainFrameLogic.getInstance();
+
+        //System.out.println(mfl.getMessagesList(1));
+        for (Message msg : mfl.getMessagesList(1)) {
+            System.out.print(msg.from.destination);
+            System.out.println();
+        }
         launch(args);
     }
 }

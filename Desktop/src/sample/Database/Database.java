@@ -441,7 +441,7 @@ public class Database {
 
     public static List<List<Object>> getMessagesInRoom(int room_id) {
         List<List<Object>> messages_in_room = new ArrayList<>();
-        String get_messages_in_room = String.format("select user.name, message.room_id, message.room_hash, message.sender_id, message.receiver_id, message.text, message.time from user, message where user.id = message.sender_id and message.room_id = %x;", room_id);
+        String get_messages_in_room = String.format("select user.name, user.public_key, message.room_id, message.room_hash, message.sender_id, message.receiver_id, message.text, message.time from user, message where user.id = message.sender_id and message.room_id = %x;", room_id);
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_messages_in_room)) {
@@ -450,6 +450,7 @@ public class Database {
             while (result.next()) {
                 message = new ArrayList<>();
                 message.add(result.getString("name"));
+                message.add(result.getString("public_key"));
                 message.add(result.getInt("room_id"));
                 message.add(result.getString("room_hash"));
                 message.add(result.getInt("sender_id"));
