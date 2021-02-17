@@ -34,6 +34,7 @@ public class I2PServer extends Thread{
     }
 
     public static boolean haveNewMessages(){
+        System.out.println("[INFO] I2PServer: Проверка наличия сообщений...");
         return !(messages.isEmpty());
     }
 
@@ -103,7 +104,8 @@ public class I2PServer extends Thread{
                                     new Account("To", myDestination),
                                     s[2],
                                     TypeOfMessage.values()[Integer.parseInt(s[0])],
-                                    s[3]
+                                    s[3],
+                                    s[4]
                                     )
                             );
                         }

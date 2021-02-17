@@ -50,7 +50,7 @@ public class I2PClient {
             //Write to server
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             bw.write(msg.type.ordinal()+"<<SYSTEM_X>>" +msg.from.destination
-                    +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom);
+                    +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom +"<<SYSTEM_X>>" + msg.time);
             //Flush to make sure everything got sent
             bw.flush();
 

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class I2PConnector {
 
     private static TypeOfConnection connectionType = TypeOfConnection.I2PConnection;
-    private static boolean isWorking = false;
 
     private static I2PServer i2pServer = new I2PServer();
     private static I2PClient i2pClient = new I2PClient();
@@ -86,10 +85,13 @@ public class I2PConnector {
     public static Account getMyAccount() {
         while(i2pServer.getMyDestination().isEmpty()){
             try {
-                System.out.println("[INFO] I2PConnector: Ожидание выделения I2P адреса...");
+                System.out.println("[INFO] I2PConnector: Ожидаем пока маршрутизатор строит туннели...");
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            if(!i2pServer.getMyDestination().isEmpty()){
+                System.out.println("[INFO] I2PConnector: Туннель выделен!");
             }
         };
         Account account = new Account("My Account", i2pServer.getMyDestination());

@@ -63,7 +63,8 @@ public class HTTPService {
                                 new Account("To", myAccount.destination),
                                 s[2],
                                 TypeOfMessage.values()[Integer.parseInt(s[0])],
-                                s[3]
+                                s[3],
+                                s[4]
                         )
                 );
             }
@@ -81,8 +82,8 @@ public class HTTPService {
     public static void SendMsg(Message msg) {
         System.out.println("[INFO] HTTPService: Отправка сообщения...");
         try{
-            String msgStr = msg.type.ordinal()+"<<SYSTEM_X>>" +msg.from.destination
-                    +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom;
+            String msgStr = msg.type.ordinal()+"<<SYSTEM_X>>" +myAccount.destination
+                    +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom + "<<SYSTEM_X>>"+ msg.time;
 
             URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
             URLConnection con = url.openConnection();
@@ -161,7 +162,7 @@ public class HTTPService {
             e.printStackTrace();
             System.err.println("====конец==стека====");
         }
-        System.err.println("[WARN] HTTPService: haveNewMessages(): Возвращено false.");
+        System.err.println("[WARN] HTTPService: haveNewMessages(): Насильно возвращено false. Непредвиденное поведение программы, сообщите разработчику.");
         return false;
     }
 }
