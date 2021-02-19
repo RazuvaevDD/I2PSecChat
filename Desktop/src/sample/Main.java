@@ -65,30 +65,6 @@ public class Main extends Application {
 //        Database.add_user(I2PConnector.getMyAccount().name, "KEY", "I love k", "");
 //        System.out.println(I2PConnector.getMyAccount().name);
 
-        List<List<Object>> test = Database.getMessagesInRoom(1);
-        for (List<Object> t : test) {
-            System.out.print(t.get(0));
-            System.out.print(t.get(1));
-            System.out.print(t.get(2));
-            System.out.print(t.get(3));
-            System.out.print(t.get(4));
-            System.out.print(t.get(5));
-            System.out.print(t.get(6));
-            System.out.print(t.get(7));
-            System.out.println();
-        }
-
-//        Database.register_message(2, "hash1", 1, 2, "hifff", "fdfs");
-//        Database.register_message(2, "hash1", 2, 1, "ffdfdhi", "fdfs");
-
-        //System.out.println(Utils.isPasswordCorrect("admin"));
-        MainFrameLogic mfl = MainFrameLogic.getInstance();
-
-        //System.out.println(mfl.getMessagesList(1));
-        for (Message msg : mfl.getMessagesList(1)) {
-            System.out.print(msg.from.destination);
-            System.out.println();
-        }
         launch(args);
     }
 }
