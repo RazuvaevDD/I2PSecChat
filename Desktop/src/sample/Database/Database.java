@@ -504,4 +504,18 @@ public class Database {
             System.out.println(e.getMessage());
         }
     }
+
+    public static int getRoomIdbyHash(String hash) {
+        int id = 0;
+        String getRoomByHash = String.format("select id from room where hash = \"%s\";", hash);
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(getRoomByHash)) {
+
+            id = result.getInt("id");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return id;
+    }
 }
