@@ -492,4 +492,16 @@ public class Database {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void deleteUserFromRoom(int room_id, int user_id) {
+        String delete_user_from_room = "delete from rooms where room_id = ? and user_id = ?";
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(delete_user_from_room)) {
+            preparedStatement.setInt(1, room_id);
+            preparedStatement.setInt(2, user_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
