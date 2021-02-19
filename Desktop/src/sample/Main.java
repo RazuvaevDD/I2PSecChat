@@ -65,6 +65,8 @@ public class Main extends Application {
 //        Database.add_user(I2PConnector.getMyAccount().name, "KEY", "I love k", "");
 //        System.out.println(I2PConnector.getMyAccount().name);
 
+        System.out.println(Database.getRoomIdbyHash("hash1"));
+
         launch(args);
     }
 }
