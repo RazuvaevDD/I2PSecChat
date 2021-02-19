@@ -466,4 +466,30 @@ public class Database {
         return messages_in_room;
     }
 
+    public static byte[] getPicture(String table_name, int id) {
+        byte[] picture = null;
+
+        String get_pic = String.format("SELECT picture FROM %s where id = %x;", table_name, id);
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_pic)) {
+
+            picture = result.getBytes("picture");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return picture;
+    }
+
+    public static void changeName(String table_name, int user_id, String new_name) {
+        String update_name = String.format("update %s set name = ? where id = ?", table_name);
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(update_name)) {
+            preparedStatement.setString(1, new_name);
+            preparedStatement.setInt(2, user_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
