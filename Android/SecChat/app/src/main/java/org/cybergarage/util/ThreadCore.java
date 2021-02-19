@@ -32,21 +32,21 @@ public class ThreadCore implements Runnable
 	//	Thread
 	////////////////////////////////////////////////
 	
-	private java.lang.Thread mThreadObject = null;
+	private Thread mThreadObject = null;
 	
-	public void setThreadObject(java.lang.Thread obj) {
+	public void setThreadObject(Thread obj) {
 		mThreadObject = obj;
 	}
 
-	public java.lang.Thread getThreadObject() {
+	public Thread getThreadObject() {
 		return mThreadObject;
 	}
 
 	public void start() 
 	{
-		java.lang.Thread threadObject = getThreadObject();
+		Thread threadObject = getThreadObject();
 		if (threadObject == null) {
-			threadObject = new java.lang.Thread(this,"Cyber.ThreadCore");
+			threadObject = new Thread(this,"Cyber.ThreadCore");
 			setThreadObject(threadObject);
 			threadObject.start();
 		}
@@ -63,7 +63,7 @@ public class ThreadCore implements Runnable
 	
 	public void stop() 
 	{
-		java.lang.Thread threadObject = getThreadObject();
+		Thread threadObject = getThreadObject();
 		if (threadObject != null) { 
 			//threadObject.destroy();
 			//threadObject.stop();

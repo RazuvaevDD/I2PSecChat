@@ -124,7 +124,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * 
      * @return connected I2PSocket OR NULL
      * @throws net.i2p.I2PException
-     * @throws java.net.SocketTimeoutException
+     * @throws SocketTimeoutException
      */
     public I2PSocket receiveSocket() throws I2PException, SocketTimeoutException {
         verifySession();
@@ -418,7 +418,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             if (!_pcapInitialized) {
                 try {
                     pcapWriter = new PcapWriter(ctx, PCAP_FILE);
-                } catch (java.io.IOException ioe) {
+                } catch (IOException ioe) {
                      System.err.println("pcap init ioe: " + ioe);
                 }
                 _pcapInitialized = true;

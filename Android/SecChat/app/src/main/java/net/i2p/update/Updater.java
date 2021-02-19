@@ -20,5 +20,5 @@ public interface Updater {
      *  @return active task or null if unable to download
      */
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
-                               String id, String newVersion, long maxTime);
+                             String id, String newVersion, long maxTime);
 }

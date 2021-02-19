@@ -64,7 +64,7 @@ public class NTCPTransport extends TransportImpl {
     private final Map<Hash, NTCPConnection> _conByIdent;
     private final EventPumper _pumper;
     private final Reader _reader;
-    private net.i2p.router.transport.ntcp.Writer _writer;
+    private Writer _writer;
     private int _ssuPort;
     /** synch on this */
     private final Set<InetSocketAddress> _endpoints;
@@ -185,7 +185,7 @@ public class NTCPTransport extends TransportImpl {
 
         _pumper = new EventPumper(ctx, this);
         _reader = new Reader(ctx);
-        _writer = new net.i2p.router.transport.ntcp.Writer(ctx);
+        _writer = new Writer(ctx);
 
         _fastBid = new SharedBid(25); // best
         _slowBid = new SharedBid(70); // better than ssu unestablished, but not better than ssu established
@@ -753,7 +753,7 @@ public class NTCPTransport extends TransportImpl {
     /**
      *  Hook for NTCPConnection
      */
-    net.i2p.router.transport.ntcp.Writer getWriter() { return _writer; }
+    Writer getWriter() { return _writer; }
 
     public String getStyle() { return STYLE; }
 
