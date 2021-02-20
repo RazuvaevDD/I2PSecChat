@@ -97,10 +97,12 @@ public class MainFrameLogic {
      * @return List of Message object.
      */
     public List<Message> getMessagesList() {
+
         if (currentRoomId == 0) {
             List<Message> emptyList = new ArrayList<>();
             return emptyList;
         }
+
         List<List<Object>> messages = Database.getMessagesInRoom(currentRoomId);
         List<Message> messagesList = new ArrayList<>();
         List<List<Object>> allUsers = Database.getAllUsers();
@@ -281,15 +283,18 @@ public class MainFrameLogic {
         }
     }
 
-    protected Image getUserAvatarPath(String userAvatarPath) {
+    protected Image getUserAvatar() {
+
         /**
          * Method that adds user avatar path to the database.
          * @param userAvatarPath String object.
          */
+
         if (currentUserId == 0)
         {
             return null;
         }
+
         String path = "";
         List<List<Object>> users = Database.getAllUsers();
         for(int i = 0; i < users.size(); i++) {
