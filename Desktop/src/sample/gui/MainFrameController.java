@@ -86,7 +86,7 @@ public class MainFrameController {
     private ImageView userAvatarImageView;
 
     @FXML
-    private ImageView roomAvatarImage;
+    private ImageView roomAvatarImageView;
 
     @FXML
     private VBox messagesVBox;
@@ -95,7 +95,7 @@ public class MainFrameController {
     private VBox roomVBox;
 
     @FXML
-    private ListView participantsListView;
+    private VBox participantsVBox;
 
     private File chooseImage() {
         FileChooser fileChooser = new FileChooser();
@@ -111,9 +111,10 @@ public class MainFrameController {
      * Method that changing avatar for current room.
      **/
     private void changeRoomAvatar() {
-        if (chooseImage() != null) {
-            System.out.println("Opening file..." + chooseImage().getPath());
-            MainFrameLogic.getInstance().setRoomAvatarPath(chooseImage().getPath());
+        File roomAvatar = chooseImage();
+        if (roomAvatar != null) {
+            System.out.println("Opening file..." + roomAvatar.getPath());
+            MainFrameLogic.getInstance().setRoomAvatarPath(roomAvatar.getPath());
         }
     }
 
@@ -121,9 +122,10 @@ public class MainFrameController {
      * Method that changing avatar for user.
      */
     private void changeUserAvatar() {
-        if (chooseImage() != null) {
-            System.out.print("Opening file..." + chooseImage().getPath());
-            MainFrameLogic.getInstance().setUserAvatarPath(chooseImage().getPath());
+        File userAvatar = chooseImage();
+        if (userAvatar != null) {
+            System.out.print("Opening file..." + userAvatar.getPath());
+            MainFrameLogic.getInstance().setUserAvatarPath(userAvatar.getPath());
         }
     }
 
@@ -160,13 +162,27 @@ public class MainFrameController {
             messagesVBox.getChildren().add(label);
         }
     }
-
+    private void fakeFillMessagesArea() {
+        for (int i = 0; i < 10; i++) {
+            Label label = new Label("DD.MM.HHHH" + ", " + "Userrr" + ": " + "message message message");
+            messagesVBox.getChildren().add(label);
+        }
+    }
     /**
      * Method filling GUI rooms area in UI with list of rooms.
      * @param roomsList: List of Room objects.
      */
     private void fillRooms(List<Room> roomsList) {
-        //TODO: add processing to convert Rooms
+        for (Room room : roomsList) {
+            Label label = new Label(room.getName());
+            roomVBox.getChildren().add(label);
+        }
+    }
+    private void fakeFillRooms() {
+        for (int i = 0; i < 10; i++) {
+            Label label = new Label("Room Name");
+            roomVBox.getChildren().add(label);
+        }
     }
 
     /**
@@ -174,7 +190,16 @@ public class MainFrameController {
      * @param participantsList: List of Account objects.
      */
     private void fillParticipants(List<Account> participantsList) {
-        //TODO: add processing to convert Accounts
+        for (Account account : participantsList) {
+            Label label = new Label(account.name);
+            participantsVBox.getChildren().add(label);
+        }
+    }
+    private void fakeFillParticipants() {
+        for (int i = 0; i < 10; i++) {
+            Label label = new Label("Participant Name");
+            participantsVBox.getChildren().add(label);
+        }
     }
 
     /**
@@ -182,7 +207,9 @@ public class MainFrameController {
      * @param roomAvatarImage: Avatar image.
      */
     private void fillRoomAvatar(Image roomAvatarImage) {
-        this.roomAvatarImage.setImage(roomAvatarImage);
+        if (roomAvatarImage != null) {
+            this.roomAvatarImageView.setImage(roomAvatarImage);
+        }
     }
 
     /**
@@ -201,14 +228,38 @@ public class MainFrameController {
         timeText.setText(date);
     }
 
+    void escapeCurrentRoom() {
+        MainFrameLogic.getInstance().escapeFromRoom();
+    }
+
+    void addParticipant() {
+
+    }
+
+    void createRoom() {
+
+    }
+
+    void fillUserAvatar(Image userAvatarImage) {
+        if (userAvatarImage != null) {
+            this.roomAvatarImageView.setImage(userAvatarImage);
+        }
+    }
+
     @FXML
     void initialize() {
-
         fillDate(MainFrameLogic.getInstance().getDate());
+
         fillMessagesArea(MainFrameLogic.getInstance().getMessagesList());
-        //fillParticipants();
-        //fillRooms();
-        //fillRoomAvatar(MainFrameLogic.getInstance().getCurrentRoom().getAvatar());
+
+        fillParticipants(MainFrameLogic.getInstance().getParticipantsList());
+
+        fillRooms(MainFrameLogic.getInstance().getRoomsList());
+
+        //fillUserAvatar(MainFrameLogic.getInstance().getUserAvatar());
+
+        //fillRoomAvatar(MainFrameLogic.getInstance().getRoomAvatar());
+
         //fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
 
         sendButton.setOnAction(event -> {
@@ -233,17 +284,17 @@ public class MainFrameController {
 
         leaveRoomButton.setOnAction(event -> {
             System.out.println("Button LEAVE ROOM was pressed");
-            //TODO: complete it
+            escapeCurrentRoom();
         });
 
         addParticipantButton.setOnAction(event -> {
             System.out.println("Button ADD PARTICIPANT was pressed");
-            //TODO: complete it
+            addParticipant();
         });
 
         createRoomButton.setOnAction(event -> {
             System.out.println("Button CREATE ROOM was pressed");
-            //TODO: complete it
+            createRoom();
         });
     }
 }

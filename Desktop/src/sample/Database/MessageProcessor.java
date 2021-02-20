@@ -10,7 +10,7 @@ public class MessageProcessor {
         Thread t = new Thread(() -> {
             while (!(I2PConnector.haveNewMessages())) {
                 try {
-                    System.out.println("[INFO] Main: Ждем пока что-то появится...");
+                    System.out.println("[INFO] MessageProcessor: Ждем пока что-то появится...");
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

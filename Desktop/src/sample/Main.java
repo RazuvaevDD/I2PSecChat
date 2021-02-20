@@ -66,6 +66,7 @@ public class Main extends Application {
 //        System.out.println(I2PConnector.getMyAccount().name);
 
         System.out.println(Database.getRoomIdbyHash("hash1"));
+        Database.update_picture("room", 1, "C:\\Users\\111\\Downloads\\grass.jpg");
 
         launch(args);
     }
