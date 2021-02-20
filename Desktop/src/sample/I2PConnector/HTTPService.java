@@ -119,6 +119,7 @@ public class HTTPService {
                 os.write(out);
             }
             System.out.println("[INFO] HTTPService: Сообщение успешно отправлено.");
+            return;
         } catch (Exception e) {
             internalException = e.getMessage();
         }
