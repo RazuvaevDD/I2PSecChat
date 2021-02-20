@@ -69,6 +69,7 @@ public class Main extends Application {
 //        System.out.println(I2PConnector.getMyAccount().name);
 
         MessageProcessor.listenForMessages();
+
         launch(args);
 
 

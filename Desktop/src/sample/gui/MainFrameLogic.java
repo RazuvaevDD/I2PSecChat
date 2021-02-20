@@ -44,7 +44,7 @@ public class MainFrameLogic {
 
     private int currentRoomId;
 
-    private void setCurrentUser(Account account) {
+    public void setCurrentUser(Account account) {
         /**
          * Setter method that sets current user.
          * TODO: ACHTUNG! Method is private for protect against changing user.
@@ -89,13 +89,13 @@ public class MainFrameLogic {
         return currentRoomId;
     }
 
+    /**
+     * Function that returns messages for current room.
+     * TODO: Maybe we should find out how to protect this method from unauthorized access to hidden rooms.
+     *       Hint: you can check is current user are participant of room from parameter.
+     * @return List of Message object.
+     */
     public List<Message> getMessagesList() {
-        /**
-         * Function that returns messages for current room.
-         * TODO: Maybe we should find out how to protect this method from unauthorized access to hidden rooms.
-         *       Hint: you can check is current user are participant of room from parameter.
-         * @return List of Message object.
-         */
         List<List<Object>> messages = Database.getMessagesInRoom(currentRoomId);
         List<Message> messagesList = new ArrayList<>();
         List<List<Object>> allUsers = Database.getAllUsers();
@@ -125,12 +125,12 @@ public class MainFrameLogic {
         for (int i = 0; i < allRooms.size(); i++) {
             String filepath = "";
             try {
-                filepath = allRooms.get(i).get(5).toString();
+                filepath = allRooms.get(i).get(6).toString();
             }
             catch(NullPointerException e) {
                 filepath = "";
             }
-            roomList.add(new Room(allRooms.get(i).get(1).toString(), allRooms.get(i).get(2).toString(), (int)allRooms.get(i).get(3), allRooms.get(i).get(4).toString(), filepath));
+            roomList.add(new Room(allRooms.get(i).get(1).toString(), allRooms.get(i).get(2).toString(), (int)allRooms.get(i).get(3), allRooms.get(i).get(5).toString(), filepath));
             //System.out.println(i);
         }
         return roomList;
@@ -220,20 +220,22 @@ public class MainFrameLogic {
         Database.update_picture("room", 1, path);
     }
 
-    protected String getRoomAvatarPath(String roomAvatarPath) {
+    protected Image getRoomAvatar() {
         /**
          * Method that adds room avatar path to the database.
          * @param roomAvatarPath String object.
          */
         String path = "";
         List<List<Object>> rooms = Database.getAllRooms();
-        for(int i = 0; i < rooms.size(); i++) {
+        for (int i = 0; i < rooms.size(); i++) {
             if ((int)rooms.get(i).get(0) == currentRoomId){
                 path = Utils.bytesToImagePath((byte[])rooms.get(i).get(6));
                 break;
             }
         }
-        return path;
+        File file = new File(path);
+        Image roomAvatar = new Image(file.toURI().toString());
+        return roomAvatar;
     }
 
     protected void setUserAvatarPath(String path) {
@@ -253,12 +255,11 @@ public class MainFrameLogic {
         Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, "New user has come", getDate());
     }
 
-    protected String getUserAvatarPath(String userAvatarPath) {
+    protected Image getUserAvatar() {
         /**
          * Method that adds user avatar path to the database.
          * @param userAvatarPath String object.
          */
-        Database.update_picture("user", currentUserId, userAvatarPath);
         String path = "";
         List<List<Object>> users = Database.getAllUsers();
         for(int i = 0; i < users.size(); i++) {
@@ -267,6 +268,8 @@ public class MainFrameLogic {
                 break;
             }
         }
-        return path;
+        File file = new File(path);
+        Image userAvatar = new Image(file.toURI().toString());
+        return userAvatar;
     }
 }

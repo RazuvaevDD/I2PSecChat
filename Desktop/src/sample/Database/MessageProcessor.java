@@ -8,6 +8,7 @@ import java.util.List;
 public class MessageProcessor {
     public static void listenForMessages() {
         Thread t = new Thread(() -> {
+
             while (true) {
                 while (!(I2PConnector.haveNewMessages())) {
                     try {
@@ -22,6 +23,7 @@ public class MessageProcessor {
                     Database.register_message(Database.getRoomIdbyHash(message.hashOfRoom), message.hashOfRoom, Database.get_id("user", message.from.name),
                             Database.get_id("user", message.to.name), message.message, message.time);
                     I2PConnector.sendMessage(message);
+
                 }
             }
         });
