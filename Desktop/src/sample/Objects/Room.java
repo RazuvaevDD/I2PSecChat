@@ -1,5 +1,9 @@
 package sample.Objects;
 
+import sample.Encryptor.Encryptor;
+
+import java.security.NoSuchAlgorithmException;
+
 public class Room {
 
     public Room(String name, String info, int deleteMessageTime, String AES_key, String filepath) {
@@ -7,6 +11,14 @@ public class Room {
         this.info = info;
         this.deleteMessageTime = deleteMessageTime;
         this.AES_key = AES_key;
+        this.filepath = filepath;
+    }
+
+    public Room(String name, String info, int deleteMessageTime, String filepath) throws NoSuchAlgorithmException {
+        this.name = name;
+        this.info = info;
+        this.deleteMessageTime = deleteMessageTime;
+        this.AES_key = Encryptor.generateKey(name);
         this.filepath = filepath;
     }
     public String getName()
