@@ -7,14 +7,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
+/**
+ * Этот класс реализует API I2PConnector. Одна из его основных функций - это
+ * соединение серверной части I2P, клиентской части I2P и HTTP клиента.
+ * @author Razuvaev Daniil
+ **/
 public class I2PConnector {
 
     private static TypeOfConnection connectionType = TypeOfConnection.I2PConnection;
 
     private static I2PServer i2pServer = new I2PServer();
     private static I2PClient i2pClient = new I2PClient();
-
+    private static HTTPService httpService;
     /*
     Устанавливает тип соединения, которое используется для работы модуля
      */
@@ -28,7 +32,7 @@ public class I2PConnector {
     public I2PConnector(){
         i2pServer.start();
         Account myAccount = getMyAccount();
-        new HTTPService(myAccount);
+        httpService = new HTTPService(myAccount);
     }
 
     /*
@@ -39,7 +43,7 @@ public class I2PConnector {
         if(connectionType==TypeOfConnection.I2PConnection)
             i2pServer.start();
         Account myAccount = getMyAccount();
-        new HTTPService(myAccount);
+        httpService = new HTTPService(myAccount);
     }
 
     /*
@@ -55,7 +59,7 @@ public class I2PConnector {
             t.start();
         }
         if(connectionType == TypeOfConnection.HTTPConnection){
-            HTTPService.SendMsg(msg);
+            httpService.SendMsg(msg);
         }
     }
 
@@ -66,7 +70,7 @@ public class I2PConnector {
         if (connectionType == TypeOfConnection.I2PConnection)
             return i2pServer.getNewMessages();
         if (connectionType == TypeOfConnection.HTTPConnection)
-            return HTTPService.getNewMessages();
+            return httpService.getNewMessages();
         System.err.println("[WARN] I2PConnector: данный connectionType не поддерживается.");
         return null;
     }
@@ -78,7 +82,7 @@ public class I2PConnector {
         if (connectionType == TypeOfConnection.I2PConnection)
             return i2pServer.haveNewMessages();
         if (connectionType == TypeOfConnection.HTTPConnection)
-            return HTTPService.haveNewMessages();
+            return httpService.haveNewMessages();
         System.err.println("[WARN] I2PConnector: данный connectionType не поддерживается.");
         return false;
     }

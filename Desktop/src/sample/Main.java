@@ -29,21 +29,17 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        new I2PConnector(TypeOfConnection.HTTPConnection); // теперь полностью независим от I2P при HTTP
-//
-//        System.out.println("[DEBUG] Main: "+I2PConnector.getMyAccount().name+
-//                "; "+I2PConnector.getMyAccount().destination);
-//
+        new I2PConnector(TypeOfConnection.HTTPConnection);
+        MessageProcessor.listenForMessages();
+//////////Пример отправки сообщения используя I2PConnectorAPI/////////////////
 //        I2PConnector.sendMessage(new Message(
 //                I2PConnector.getMyAccount(),    // отправитель
 //                I2PConnector.getMyAccount(),    // получатель
-//                "testMsgFromClient",    // сообщение
+//                "testMsgFromClient",            // сообщение
 //                TypeOfMessage.StringMessage,    // тип сообщения
-//                "ВКакуюКомнату"));   // хэш комнаты (для понимания в какую комнату идет сообщение,
-//                                                //                  не обязателен для использования,
-//                                                //                      НО! не может быть пустой строкой.)
+//                "ВКакуюКомнату"));              // хэш комнаты (для понимания в какую комнату идет сообщение)
 //
-//        // зависаем пока нет сообщений (HTTP подвиснет максимум на 5 сек из-за таймера)
+//////////Пример реализации получения сообщения используя I2PConnectorAPI/////
 //        while (!(I2PConnector.haveNewMessages())) {
 //            try {
 //                System.out.println("[INFO] Main: Ждем пока что-то появится...");
@@ -53,7 +49,7 @@ public class Main extends Application {
 //            }
 //        }
 //        System.out.println(I2PConnector.getNewMessages().get(0).message);
-//
+//////////Пример работы базы данных(?)////////////////////////////////////////
 //        Database.create_all_tables();
 //        Database.add_user("Andrey Dolmatov", "private_key1", "public_key1", "", "");
 //        Database.add_user("Elena Kurbatova", "private_key2", "public_key2", "", "");
@@ -67,11 +63,7 @@ public class Main extends Application {
 //        Database.add_new_contact(2, 1);
 //        Database.add_user(I2PConnector.getMyAccount().name, "KEY", "I love k", "");
 //        System.out.println(I2PConnector.getMyAccount().name);
-
-        MessageProcessor.listenForMessages();
-
+//////////////////////////////////////////////////////////////////////////////
         launch(args);
-
-
     }
 }

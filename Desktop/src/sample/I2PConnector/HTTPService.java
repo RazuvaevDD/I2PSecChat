@@ -14,19 +14,24 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
-
+/**
+ * Этот класс реализует HTTP клиент.
+ * @author Razuvaev Daniil
+ **/
 public class HTTPService {
-    static Account myAccount;
+    Account myAccount;
+    private int errorStack = 0;
+    private static final int MAX_ERROR_STACK = 100;
 
     public HTTPService(Account myAccount) {
         this.myAccount = myAccount;
     }
 
-    public static ArrayList<Message> getNewMessages() {
+    public ArrayList<Message> getNewMessages() {
         ArrayList<Message> messages = new ArrayList();
         System.out.println("[INFO] HTTPService: Получение сообщений...");
         try {
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/api.php");
+            URL url = new URL("http://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -76,16 +81,30 @@ public class HTTPService {
             e.printStackTrace();
             System.err.println("====конец==стека====");
         }
+        if(errorStack > MAX_ERROR_STACK){
+            System.err.println("[ERROR] HTTPService: getNewMessages(): Ошибка не разрешена. " +
+                    "Вероятно проблема с подключением к сети. " +
+                    "Перепроверьте соединение и попробуйте позже.");
+            System.err.println("[ERROR] HTTPService: getNewMessages(): Список сообщений возвращает пустой список.");
+            errorStack = 0;
+            return messages;
+        }
+        System.err.println("[WARN] HTTPService: getNewMessages(): Рекурсивный перезапуск получения сообщений...");
+        errorStack++;
+        System.err.println("[WARN] HTTPService: getNewMessages(): Необходима перепроверка на то что сообщения есть...");
+        System.err.println("[WARN] HTTPService: getNewMessages(): Если после этого сообщения нет сообщения об ошибке, она была успешно разрешена.");
+        if(haveNewMessages())
+            messages = getNewMessages();
         return messages;
     }
 
-    public static void SendMsg(Message msg) {
+    public void SendMsg(Message msg) {
         System.out.println("[INFO] HTTPService: Отправка сообщения...");
         try{
             String msgStr = msg.type.ordinal()+"<<SYSTEM_X>>" +myAccount.destination
                     +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom + "<<SYSTEM_X>>"+ msg.time;
 
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/api.php");
+            URL url = new URL("http://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -115,12 +134,24 @@ public class HTTPService {
             e.printStackTrace();
             System.err.println("====конец==стека====");
         }
+        if(errorStack > MAX_ERROR_STACK){
+            System.err.println("[ERROR] HTTPService: SendMsg(Message): Ошибка не разрешена. " +
+                    "Вероятно проблема с подключением к сети. " +
+                    "Перепроверьте соединение и попробуйте позже.");
+            System.err.println("[ERROR] HTTPService: SendMsg(Message): Сообщение не отправлено.");
+            errorStack = 0;
+            return;
+        }
+        System.err.println("[WARN] HTTPService: SendMsg(Message): Рекурсивный перезапуск отправки сообщения...");
+        errorStack++;
+        System.err.println("[WARN] HTTPService: SendMsg(Message): Если после этого сообщения нет сообщения об ошибке, она была успешно разрешена.");
+        SendMsg(msg);
     }
 
-    public static boolean haveNewMessages() {
+    public boolean haveNewMessages() {
         System.out.println("[INFO] HTTPService: Проверка наличия сообщений...");
         try {
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/api.php");
+            URL url = new URL("http://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -158,12 +189,23 @@ public class HTTPService {
             }
 
         }catch (Exception e) {
-            System.err.println("[UNCRITICAL ERROR] HTTPService: Проверка завершилась неудачно. Причина: Внутренняя ошибка.");
+            System.err.println("[UNCRITICAL ERROR] HTTPService: haveNewMessages(): Проверка завершилась неудачно. Причина: Внутренняя ошибка.");
             System.err.println("========СТЭК========");
             e.printStackTrace();
             System.err.println("====конец==стека====");
         }
-        System.err.println("[WARN] HTTPService: haveNewMessages(): Насильно возвращено false. Непредвиденное поведение программы, сообщите разработчику.");
-        return false;
+        if(errorStack > MAX_ERROR_STACK){
+            System.err.println("[ERROR] HTTPService: haveNewMessages(): Ошибка не разрешена. " +
+                    "Вероятно проблема с подключением к сети. " +
+                    "Перепроверьте соединение и попробуйте позже.");
+            System.err.println("[ERROR] HTTPService: haveNewMessages(): Возвращаем false.");
+            errorStack = 0;
+            return false;
+        }
+        System.err.println("[WARN] HTTPService: haveNewMessages(): Рекурсивный перезапуск проверки...");
+        errorStack++;
+        System.err.println("[WARN] HTTPService: haveNewMessages(): Если после этого сообщения нет сообщения об ошибке, она была успешно разрешена.");
+
+        return haveNewMessages();
     }
 }
