@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import sample.Database.Database;
+import sample.Database.MessageProcessor;
 import sample.I2PConnector.I2PConnector;
 import sample.I2PConnector.TypeOfConnection;
 import sample.Objects.*;
@@ -65,8 +66,9 @@ public class Main extends Application {
 //        Database.add_user(I2PConnector.getMyAccount().name, "KEY", "I love k", "");
 //        System.out.println(I2PConnector.getMyAccount().name);
 
-        System.out.println(Database.getRoomIdbyHash("hash1"));
-
+        MessageProcessor.listenForMessages();
         launch(args);
+
+
     }
 }
