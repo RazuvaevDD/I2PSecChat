@@ -122,7 +122,7 @@ public class MainFrameLogic {
         return messagesList;
     }
 
-    public List<Room> getRoomsList() throws NoSuchAlgorithmException {
+    public List<Room> getRoomsList() {
         /**
          * Function that returns list of rooms for current user.
          * @return List of Room object.
