@@ -129,8 +129,25 @@ public class I2PConnector {
                 }
             }
             if(isUnix()){
-                System.err.println("[CRITICAL_ERROR] I2PConnector: Не реализовано для Linux!");
-                System.exit(-1);
+                try {
+                    String command = "md5sum /proc/bus/pci/devices";
+                    StringBuffer output = new StringBuffer();
+
+                    Process SerNumProcess = Runtime.getRuntime().exec(command);
+                    BufferedReader sNumReader = new BufferedReader(new InputStreamReader(SerNumProcess.getInputStream()));
+
+                    while (true) {
+                        String line = "";
+                        if (!((line = sNumReader.readLine()) != null)) break;
+
+                        output.append(line + "\n");
+                    }
+                    String MachineID = output.toString().substring(0, output.indexOf(" ")).trim();
+                    //System.out.println(MachineID);
+                    return new Account("My Linux Account HTTP", MachineID);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             System.err.println("[CRITICAL_ERROR] I2PConnector: Не обнаружен идентификатор устройства!");
             System.exit(-1);

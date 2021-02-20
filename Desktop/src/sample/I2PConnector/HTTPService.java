@@ -22,6 +22,7 @@ public class HTTPService {
     Account myAccount;
     private int errorStack = 0;
     private static final int MAX_ERROR_STACK = 100;
+    private String internalException = null;
 
     public HTTPService(Account myAccount) {
         this.myAccount = myAccount;
@@ -73,28 +74,18 @@ public class HTTPService {
                         )
                 );
             }
-
         } catch (Exception e) {
-            //e.getMessage().contains(substring)
-            System.err.println("[UNCRITICAL ERROR] HTTPService: Сообщения не получены. Причина: Внутренняя ошибка.");
-            System.err.println("========СТЭК========");
-            e.printStackTrace();
-            System.err.println("====конец==стека====");
+            internalException = e.getMessage();
         }
         if(errorStack > MAX_ERROR_STACK){
-            System.err.println("[ERROR] HTTPService: getNewMessages(): Ошибка не разрешена. " +
-                    "Вероятно проблема с подключением к сети. " +
-                    "Перепроверьте соединение и попробуйте позже.");
-            System.err.println("[ERROR] HTTPService: getNewMessages(): Список сообщений возвращает пустой список.");
-            errorStack = 0;
+            System.err.println("[UNCRITICAL ERROR] HTTPService: getNewMessages(): "+internalException);
+            System.err.println("[WARN] HTTPService: getNewMessages(): Список сообщений возвращает пустой список.");
             return messages;
         }
-        System.err.println("[WARN] HTTPService: getNewMessages(): Рекурсивный перезапуск получения сообщений...");
         errorStack++;
-        System.err.println("[WARN] HTTPService: getNewMessages(): Необходима перепроверка на то что сообщения есть...");
-        System.err.println("[WARN] HTTPService: getNewMessages(): Если после этого сообщения нет сообщения об ошибке, она была успешно разрешена.");
         if(haveNewMessages())
             messages = getNewMessages();
+        errorStack = 0;
         return messages;
     }
 
@@ -129,23 +120,16 @@ public class HTTPService {
             }
             System.out.println("[INFO] HTTPService: Сообщение успешно отправлено.");
         } catch (Exception e) {
-            System.err.println("[UNCRITICAL ERROR] HTTPService: Сообщение не отправлено. Причина: Внутренняя ошибка.");
-            System.err.println("========СТЭК========");
-            e.printStackTrace();
-            System.err.println("====конец==стека====");
+            internalException = e.getMessage();
         }
         if(errorStack > MAX_ERROR_STACK){
-            System.err.println("[ERROR] HTTPService: SendMsg(Message): Ошибка не разрешена. " +
-                    "Вероятно проблема с подключением к сети. " +
-                    "Перепроверьте соединение и попробуйте позже.");
-            System.err.println("[ERROR] HTTPService: SendMsg(Message): Сообщение не отправлено.");
-            errorStack = 0;
+            System.err.println("[UNCRITICAL ERROR] HTTPService: SendMsg(Message): "+internalException);
+            System.err.println("[WARN] HTTPService: SendMsg(Message): Сообщение не отправлено.");
             return;
         }
-        System.err.println("[WARN] HTTPService: SendMsg(Message): Рекурсивный перезапуск отправки сообщения...");
         errorStack++;
-        System.err.println("[WARN] HTTPService: SendMsg(Message): Если после этого сообщения нет сообщения об ошибке, она была успешно разрешена.");
         SendMsg(msg);
+        errorStack = 0;
     }
 
     public boolean haveNewMessages() {
@@ -185,27 +169,20 @@ public class HTTPService {
             } else if(res.equals("false")){
                 return false;
             } else {
-                throw new Exception("[UNCRITICAL ERROR] HTTPService: Сервер возвратил неожиданный ответ: \""+res+"\"");
+                throw new Exception("Сервер возвратил неожиданный ответ: \""+res+"\"");
             }
 
         }catch (Exception e) {
-            System.err.println("[UNCRITICAL ERROR] HTTPService: haveNewMessages(): Проверка завершилась неудачно. Причина: Внутренняя ошибка.");
-            System.err.println("========СТЭК========");
-            e.printStackTrace();
-            System.err.println("====конец==стека====");
+            internalException = e.getMessage();
         }
         if(errorStack > MAX_ERROR_STACK){
-            System.err.println("[ERROR] HTTPService: haveNewMessages(): Ошибка не разрешена. " +
-                    "Вероятно проблема с подключением к сети. " +
-                    "Перепроверьте соединение и попробуйте позже.");
-            System.err.println("[ERROR] HTTPService: haveNewMessages(): Возвращаем false.");
-            errorStack = 0;
+            System.err.println("[UNCRITICAL ERROR] HTTPService: haveNewMessages(): "+internalException);
+            System.err.println("[WARN] HTTPService: haveNewMessages(): Возвращаем false.");
             return false;
         }
-        System.err.println("[WARN] HTTPService: haveNewMessages(): Рекурсивный перезапуск проверки...");
         errorStack++;
-        System.err.println("[WARN] HTTPService: haveNewMessages(): Если после этого сообщения нет сообщения об ошибке, она была успешно разрешена.");
-
-        return haveNewMessages();
+        boolean res = haveNewMessages();
+        errorStack = 0;
+        return res;
     }
 }
