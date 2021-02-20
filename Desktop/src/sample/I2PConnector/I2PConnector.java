@@ -118,8 +118,7 @@ public class I2PConnector {
                         output.append(line + "\n");
                     }
                     String MachineID = output.toString().substring(output.indexOf("\n"), output.length()).trim();
-                    ;
-                    System.out.println(MachineID);
+                    //System.out.println(MachineID);
                     return new Account("My Windows Account HTTP", MachineID);
                 } catch (IOException e) {
                     e.printStackTrace();

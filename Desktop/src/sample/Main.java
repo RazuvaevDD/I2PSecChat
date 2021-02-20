@@ -29,8 +29,10 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        /*new I2PConnector(TypeOfConnection.I2PConnection);                // Можно юзать так
-        I2PConnector.setConnectionType(TypeOfConnection.HTTPConnection); // Или так...
+        new I2PConnector(TypeOfConnection.HTTPConnection); // теперь полностью независим от I2P при HTTP
+
+        System.out.println("[DEBUG] Main: "+I2PConnector.getMyAccount().name+
+                "; "+I2PConnector.getMyAccount().destination);
 
         I2PConnector.sendMessage(new Message(
                 I2PConnector.getMyAccount(),    // отправитель
@@ -50,7 +52,7 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
-        System.out.println(I2PConnector.getNewMessages().get(0).message);*/
+        System.out.println(I2PConnector.getNewMessages().get(0).message);
 //
 //        Database.create_all_tables();
 //        Database.add_user("Andrey Dolmatov", "private_key1", "public_key1", "", "");
