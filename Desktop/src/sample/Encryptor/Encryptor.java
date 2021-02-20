@@ -14,12 +14,9 @@ public class Encryptor {
 
     private static SecretKeySpec secretKey;
 
-    public static String generateKey(LoginData loginData) throws NoSuchAlgorithmException {
-        String login = loginData.getLogin();
-        String password = loginData.getPassword();
+    public static String generateKey(String keyWord) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update(password.getBytes());
-        md.update(login.getBytes());
+        md.update(keyWord.getBytes());
         byte[] digest = md.digest();
         return Base64.getEncoder().encodeToString(digest);
     }
