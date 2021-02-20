@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 //import javafx.scene.text.Text;
@@ -22,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import sample.Database.Database;
 import sample.I2PConnector.I2PConnector;
+import sample.Main;
 import sample.Objects.Account;
 import sample.Objects.Message;
 import sample.Objects.Room;
@@ -84,7 +86,7 @@ public class MainFrameController {
     private ImageView userAvatarImageView;
 
     @FXML
-    private ImageView roomAvatarImageView;
+    private ImageView roomAvatarImage;
 
     @FXML
     private VBox messagesVBox;
@@ -93,70 +95,109 @@ public class MainFrameController {
     private VBox roomVBox;
 
     @FXML
-    private VBox participantsVBox;
+    private ListView participantsListView;
 
-    private void changeRoomAvatar(String newRoomAvatar) {
-        /**
-         * Method that changing avatar for current room.
-         * @param newRoomAvatar: String with path to avatar in local file system.
-         **/
+    private File chooseImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open image");
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("JPG", "*.jpg");
+        fileChooser.getExtensionFilters().add(extFilter);
+        Stage stage = new Stage();
+        return fileChooser.showOpenDialog(stage);
     }
 
-    private void changeUserAvatar(String newUserAvatar) {
-        /**
-         * Method that changing avatar for user.
-         * @param newUserAvatar: String with path to avatar in local file system.
-         */
+    /**
+     * Method that changing avatar for current room.
+     **/
+    private void changeRoomAvatar() {
+        if (chooseImage() != null) {
+            System.out.println("Opening file..." + chooseImage().getPath());
+            MainFrameLogic.getInstance().setRoomAvatarPath(chooseImage().getPath());
+        }
     }
 
-    private void sendMessage(String userMessage) {
-        /**
-         * Method that sending message to current room.
-         * @param userMessage: String with message.
-         */
+    /**
+     * Method that changing avatar for user.
+     */
+    private void changeUserAvatar() {
+        if (chooseImage() != null) {
+            System.out.print("Opening file..." + chooseImage().getPath());
+            MainFrameLogic.getInstance().setUserAvatarPath(chooseImage().getPath());
+        }
     }
 
+    /**
+     * Method that sending message to current room.
+     */
+    private void sendMessage() {
+        String message = messageTextField.getText();
+        if (message != null && !message.equals("")) {
+            MainFrameLogic.getInstance().addNewMessage(message);
+            messageTextField.setText("");
+            System.out.println("LOG EVENT: message has been sent");
+        } else {
+            System.out.println("LOG EVENT: message sending error");
+        }
+    }
+
+    /**
+     * Method copied public key to clipboard
+     */
+    private void getPublicKey() {
+        StringSelection stringSelection = new StringSelection(MainFrameLogic.getInstance().getPublicKey());
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
+
+    /**
+     * Method filling GUI message area in current room with list of messages.
+     * @param messagesList: List of Message objects.
+     */
     private void fillMessagesArea(List<Message> messagesList) {
-        /**
-         * Method filling GUI message area in current room with list of messages.
-         * @param messagesList: List of Message objects.
-         */
+        for (Message message : messagesList) {
+            Label label = new Label(message.time + ", " + message.from.name + ": " + message.message);
+            messagesVBox.getChildren().add(label);
+        }
     }
 
+    /**
+     * Method filling GUI rooms area in UI with list of rooms.
+     * @param roomsList: List of Room objects.
+     */
     private void fillRooms(List<Room> roomsList) {
-        /**
-         * Method filling GUI rooms area in UI with list of rooms.
-         * @param roomsList: List of Room objects.
-         */
+        //TODO: add processing to convert Rooms
     }
 
+    /**
+     * Method filling GUI participants area in current room with list of participants.
+     * @param participantsList: List of Account objects.
+     */
     private void fillParticipants(List<Account> participantsList) {
-        /**
-         * Method filling GUI participants area in current room with list of participants.
-         * @param participantsList: List of Account objects.
-         */
+        //TODO: add processing to convert Accounts
     }
 
-    private void fillRoomAvatar(String roomAvatarPath) {
-        /**
-         * Method filling Avatar area of current room.
-         * @param roomAvatarPath: String with path to avatar in local file system.
-         */
+    /**
+     * Method filling Avatar area of current room.
+     * @param roomAvatarImage: Avatar image.
+     */
+    private void fillRoomAvatar(Image roomAvatarImage) {
+        this.roomAvatarImage.setImage(roomAvatarImage);
     }
 
+    /**
+     * Method filling name of current room.
+     * @param roomName: String with name of room.
+     */
     private void fillRoomName(String roomName) {
-        /**
-         * Method filling name of current room.
-         * @param roomName: String with name of room.
-         */
+        this.roomName.setText(roomName);
     }
 
-    void fillDate(String date) {
-        /**
-         * Method filling date in GUI.
-         * @param date: String with current date.
-         */
-
+    /**
+     * Method filling date in GUI.
+     * @param date: String with current date.
+     */
+    private void fillDate(String date) {
         timeText.setText(date);
     }
 
@@ -164,34 +205,45 @@ public class MainFrameController {
     void initialize() {
 
         fillDate(MainFrameLogic.getInstance().getDate());
-
+        fillMessagesArea(MainFrameLogic.getInstance().getMessagesList());
+        //fillParticipants();
+        //fillRooms();
+        //fillRoomAvatar(MainFrameLogic.getInstance().getCurrentRoom().getAvatar());
+        //fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
 
         sendButton.setOnAction(event -> {
-            System.out.println("Button SEND was pressed");
+            System.out.println("LOG EVENT: Button SEND was pressed");
+            sendMessage();
         });
 
         publicKeyButton.setOnAction(event -> {
             System.out.println("Button KEY was pressed");
+            getPublicKey();
         });
 
         changeRoomAvatarButton.setOnAction(event -> {
             System.out.println("Button CHANGE ROOM AVATAR was pressed");
+            changeRoomAvatar();
         });
 
         changeUserAvatarButton.setOnAction(event -> {
             System.out.println("Button CHANGE USER AVATAR was pressed");
+            changeUserAvatar();
         });
 
         leaveRoomButton.setOnAction(event -> {
             System.out.println("Button LEAVE ROOM was pressed");
+            //TODO: complete it
         });
 
         addParticipantButton.setOnAction(event -> {
             System.out.println("Button ADD PARTICIPANT was pressed");
+            //TODO: complete it
         });
 
         createRoomButton.setOnAction(event -> {
             System.out.println("Button CREATE ROOM was pressed");
+            //TODO: complete it
         });
     }
 }
