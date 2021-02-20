@@ -26,7 +26,7 @@ public class HTTPService {
         ArrayList<Message> messages = new ArrayList();
         System.out.println("[INFO] HTTPService: Получение сообщений...");
         try {
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
+            URL url = new URL("https://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -85,7 +85,7 @@ public class HTTPService {
             String msgStr = msg.type.ordinal()+"<<SYSTEM_X>>" +myAccount.destination
                     +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom + "<<SYSTEM_X>>"+ msg.time;
 
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
+            URL url = new URL("https://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -120,7 +120,7 @@ public class HTTPService {
     public static boolean haveNewMessages() {
         System.out.println("[INFO] HTTPService: Проверка наличия сообщений...");
         try {
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
+            URL url = new URL("https://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -142,6 +142,7 @@ public class HTTPService {
             try(OutputStream os = http.getOutputStream()) {
                 os.write(out);
             }
+
 
             InputStreamReader isReader = new InputStreamReader(http.getInputStream());
             BufferedReader reader = new BufferedReader(isReader);
