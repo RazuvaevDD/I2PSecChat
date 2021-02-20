@@ -38,7 +38,11 @@ public class MainFrameLogic {
 
     private Account currentUser;
 
+    private int currentUserId;
+
     private Room currentRoom;
+
+    private int currentRoomId;
 
     private void setCurrentUser(Account account) {
         /**
@@ -49,6 +53,7 @@ public class MainFrameLogic {
          * @param account Account of current user.
          */
         currentUser = account;
+        currentUserId = Database.get_id("user", account.name);
     }
 
     protected Account getCurrentUser() {
@@ -59,11 +64,16 @@ public class MainFrameLogic {
         return currentUser;
     }
 
+    protected int getCurrentUserId() {
+        return currentUserId;
+    }
+
     protected void setCurrentRoom(Room room) {
         /**
          * Setter method that sets current room.
          * @param room current room as Room object.
          */
+        currentRoomId = Database.getRoomIdbyHash(room.getAESKey());
         currentRoom = room;
     }
 
@@ -75,14 +85,18 @@ public class MainFrameLogic {
         return currentRoom;
     }
 
-    public List<Message> getMessagesList(int room_id) {
+    protected int getCurrentRoomId() {
+        return currentRoomId;
+    }
+
+    public List<Message> getMessagesList() {
         /**
          * Function that returns messages for current room.
          * TODO: Maybe we should find out how to protect this method from unauthorized access to hidden rooms.
          *       Hint: you can check is current user are participant of room from parameter.
          * @return List of Message object.
          */
-        List<List<Object>> messages = Database.getMessagesInRoom(room_id);
+        List<List<Object>> messages = Database.getMessagesInRoom(currentRoomId);
         List<Message> messagesList = new ArrayList<>();
         List<List<Object>> allUsers = Database.getAllUsers();
         for (List<Object> message : messages) {
@@ -116,18 +130,18 @@ public class MainFrameLogic {
             catch(NullPointerException e) {
                 filepath = "";
             }
-            roomList.add(new Room((int)allRooms.get(i).get(0), allRooms.get(i).get(1).toString(), allRooms.get(i).get(2).toString(), (int)allRooms.get(i).get(3), allRooms.get(i).get(4).toString(), filepath));
-            System.out.println(i);
+            roomList.add(new Room(allRooms.get(i).get(1).toString(), allRooms.get(i).get(2).toString(), (int)allRooms.get(i).get(3), allRooms.get(i).get(4).toString(), filepath));
+            //System.out.println(i);
         }
         return roomList;
     }
 
-    protected List<Account> getParticipantsList(int room_id) {
+    protected List<Account> getParticipantsList() {
         /**
          * Function that returns participants of current room.
          * @return List of Account objects.
          */
-        List<List<Object>> usersInRoom = Database.getUsersInRoom(room_id);
+        List<List<Object>> usersInRoom = Database.getUsersInRoom(currentRoomId);
         List<Account> participantsList = new ArrayList<>();
         for (List<Object> user: usersInRoom) {
             participantsList.add(new Account(user.get(1).toString(), user.get(3).toString()));
@@ -135,7 +149,7 @@ public class MainFrameLogic {
         return participantsList;
     }
 
-    public List<Account> getContactsList(int user_id) {
+    public List<Account> getContactsList() {
         /**
          * Function that returns contacts of user.
          * @return List of Account objects.
@@ -144,7 +158,7 @@ public class MainFrameLogic {
          *      There is shouldn't be any ways to get contacts of another user.
          */
         List<List<Object>> allUsers = Database.getAllUsers();
-        List<String> userContacts = Database.getUsersContacts(user_id);
+        List<String> userContacts = Database.getUsersContacts(currentUserId);
         List<Account> contactsList = new ArrayList<>();
         String userPublicKey = "";
         for (String contact: userContacts) {
@@ -172,17 +186,17 @@ public class MainFrameLogic {
          * Function that generates current date in String format.
          * @return String with current date in dd.mm.yyyy format.
          */
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy h:mm a");
         Date date = new Date();
         return formatter.format(date);
     }
 
-    protected void addNewMessage(String message, int room_id, String hash, int sender_id, int receiver_id) {
+    protected void addNewMessage(String message) {
         /**
          * Method that adds messages to database.
          * @param message String with text of message.
          */
-        Database.register_message(room_id, hash, sender_id, receiver_id, message, getDate());
+        Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, message, getDate());
     }
 
     public void addNewRoom(Room room) {
@@ -193,55 +207,66 @@ public class MainFrameLogic {
         Database.add_room(room.getName(), room.getDeleteMessageTime(), room.getInfo(), room.getAESKey(), room.getAESKey(), room.getFilepath());
     }
 
-    protected void addNewMember(Account account, int room_id, int user_id) {
+    protected void addNewMember(Account account) {
         /**
          * Method that adds new member to current room.
          * @param account Account object that will be added to room.
          */
-        Database.add_user_to_room(room_id, user_id);
+        notifyUsersAboutNewMember();
+        Database.add_user_to_room(currentRoomId, currentUserId);
     }
 
-    @Deprecated
-    protected void setRoomAvatarPath(String roomAvatarPath, int room_id) {
+    protected void setRoomAvatarPath(String path) {
+        Database.update_picture("room", 1, path);
+    }
+
+    protected String getRoomAvatarPath(String roomAvatarPath) {
         /**
          * Method that adds room avatar path to the database.
          * @param roomAvatarPath String object.
          */
-        Database.update_picture("room", 1, roomAvatarPath);
         String path = "";
         List<List<Object>> rooms = Database.getAllRooms();
         for(int i = 0; i < rooms.size(); i++) {
-            if ((int)rooms.get(i).get(0) == room_id){
+            if ((int)rooms.get(i).get(0) == currentRoomId){
                 path = Utils.bytesToImagePath((byte[])rooms.get(i).get(6));
                 break;
             }
         }
-
-        File file = new File(path);
-        Image roomAvatar = new Image(file.toURI().toString());
-        //roomAvatarImageView.setImage(roomAvatar);
-        /** PLZ DO SOMETHING ABOUT !!!**/
+        return path;
     }
 
-    @Deprecated
-    protected void setUserAvatarPath(String userAvatarPath, int user_id) {
+    protected void setUserAvatarPath(String path) {
+        Database.update_picture("user", currentUserId, path);
+    }
+
+    protected void escapeFromRoom() {
+        Database.deleteUserFromRoom(currentRoomId, currentUserId);
+        currentRoomId = 0;
+        currentRoom = null;
+        I2PConnector.sendMessage(new Message(currentUser, null, "User left chat", TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
+        Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, "User left chat", getDate());
+    }
+
+    protected void notifyUsersAboutNewMember() {
+        I2PConnector.sendMessage(new Message(currentUser, null, "New user has come", TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
+        Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, "New user has come", getDate());
+    }
+
+    protected String getUserAvatarPath(String userAvatarPath) {
         /**
          * Method that adds user avatar path to the database.
          * @param userAvatarPath String object.
          */
-        Database.update_picture("user", 1, userAvatarPath);
+        Database.update_picture("user", currentUserId, userAvatarPath);
         String path = "";
         List<List<Object>> users = Database.getAllUsers();
         for(int i = 0; i < users.size(); i++) {
-            if ((int)users.get(i).get(0) == user_id){
+            if ((int)users.get(i).get(0) == currentUserId){
                 path = Utils.bytesToImagePath((byte[])users.get(i).get(5));
                 break;
             }
         }
-
-        File file = new File(path);
-        Image userAvatar = new Image(file.toURI().toString());
-        //roomAvatarImageView.setImage(roomAvatar);
-        /** PLZ DO SOMETHING ABOUT !!!**/
+        return path;
     }
 }
