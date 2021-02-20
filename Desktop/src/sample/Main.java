@@ -30,29 +30,29 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         new I2PConnector(TypeOfConnection.HTTPConnection); // теперь полностью независим от I2P при HTTP
-
-        System.out.println("[DEBUG] Main: "+I2PConnector.getMyAccount().name+
-                "; "+I2PConnector.getMyAccount().destination);
-
-        I2PConnector.sendMessage(new Message(
-                I2PConnector.getMyAccount(),    // отправитель
-                I2PConnector.getMyAccount(),    // получатель
-                "testMsgFromClient",    // сообщение
-                TypeOfMessage.StringMessage,    // тип сообщения
-                "ВКакуюКомнату"));   // хэш комнаты (для понимания в какую комнату идет сообщение,
-                                                //                  не обязателен для использования,
-                                                //                      НО! не может быть пустой строкой.)
-
-        // зависаем пока нет сообщений (HTTP подвиснет максимум на 5 сек из-за таймера)
-        while (!(I2PConnector.haveNewMessages())) {
-            try {
-                System.out.println("[INFO] Main: Ждем пока что-то появится...");
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println(I2PConnector.getNewMessages().get(0).message);
+//
+//        System.out.println("[DEBUG] Main: "+I2PConnector.getMyAccount().name+
+//                "; "+I2PConnector.getMyAccount().destination);
+//
+//        I2PConnector.sendMessage(new Message(
+//                I2PConnector.getMyAccount(),    // отправитель
+//                I2PConnector.getMyAccount(),    // получатель
+//                "testMsgFromClient",    // сообщение
+//                TypeOfMessage.StringMessage,    // тип сообщения
+//                "ВКакуюКомнату"));   // хэш комнаты (для понимания в какую комнату идет сообщение,
+//                                                //                  не обязателен для использования,
+//                                                //                      НО! не может быть пустой строкой.)
+//
+//        // зависаем пока нет сообщений (HTTP подвиснет максимум на 5 сек из-за таймера)
+//        while (!(I2PConnector.haveNewMessages())) {
+//            try {
+//                System.out.println("[INFO] Main: Ждем пока что-то появится...");
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        System.out.println(I2PConnector.getNewMessages().get(0).message);
 //
 //        Database.create_all_tables();
 //        Database.add_user("Andrey Dolmatov", "private_key1", "public_key1", "", "");

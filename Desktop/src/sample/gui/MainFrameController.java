@@ -1,6 +1,7 @@
 package sample.gui;
 
 import com.sun.corba.se.impl.orb.DataCollectorBase;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,10 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 //import javafx.scene.text.Text;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
@@ -39,6 +42,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,6 +85,15 @@ public class MainFrameController {
 
     @FXML
     private TextField messageTextField;
+
+    @FXML
+    private TextField roomNameTextField;
+
+    @FXML
+    private TextField nameTextField;
+
+    @FXML
+    private TextField keyTextField;
 
     @FXML
     private ImageView userAvatarImageView;
@@ -157,6 +170,7 @@ public class MainFrameController {
      * @param messagesList: List of Message objects.
      */
     private void fillMessagesArea(List<Message> messagesList) {
+        messagesVBox.getChildren().clear();
         for (Message message : messagesList) {
             Label label = new Label(message.time + ", " + message.from.name + ": " + message.message);
             messagesVBox.getChildren().add(label);
@@ -173,6 +187,7 @@ public class MainFrameController {
      * @param roomsList: List of Room objects.
      */
     private void fillRooms(List<Room> roomsList) {
+        roomVBox.getChildren().clear();
         for (Room room : roomsList) {
             Label label = new Label(room.getName());
             roomVBox.getChildren().add(label);
@@ -190,6 +205,7 @@ public class MainFrameController {
      * @param participantsList: List of Account objects.
      */
     private void fillParticipants(List<Account> participantsList) {
+        participantsVBox.getChildren().clear();
         for (Account account : participantsList) {
             Label label = new Label(account.name);
             participantsVBox.getChildren().add(label);
@@ -233,11 +249,29 @@ public class MainFrameController {
     }
 
     void addParticipant() {
+        String partName = nameTextField.getText();
+        String partKey = keyTextField.getText();
 
+        if (partName != null && !partName.equals("")) {
+            if (partKey != null && !partKey.equals("")) {
+                Account account = new Account(partName, partKey);
+                MainFrameLogic.getInstance().addNewMember(account);
+            } else {
+                nameTextField.promptTextProperty().setValue("Неправильный ключ");
+            }
+        } else {
+            nameTextField.promptTextProperty().setValue("Неправильное имя");
+        }
     }
 
-    void createRoom() {
-
+    void createRoom() throws NoSuchAlgorithmException {
+        String roomName = roomNameTextField.getText();
+        if (roomName != null && !roomName.equals("")) {
+            Room room = new Room(roomName, "", 999999999, "sample/gui/resources/gear.png");
+            MainFrameLogic.getInstance().addNewRoom(room);
+        } else {
+            roomNameTextField.promptTextProperty().setValue("Неправильное имя");
+        }
     }
 
     void fillUserAvatar(Image userAvatarImage) {
@@ -246,8 +280,7 @@ public class MainFrameController {
         }
     }
 
-    @FXML
-    void initialize() {
+    void update() {
         fillDate(MainFrameLogic.getInstance().getDate());
 
         fillMessagesArea(MainFrameLogic.getInstance().getMessagesList());
@@ -256,45 +289,62 @@ public class MainFrameController {
 
         fillRooms(MainFrameLogic.getInstance().getRoomsList());
 
-        //fillUserAvatar(MainFrameLogic.getInstance().getUserAvatar());
+        fillUserAvatar(MainFrameLogic.getInstance().getUserAvatar());
 
-        //fillRoomAvatar(MainFrameLogic.getInstance().getRoomAvatar());
+        fillRoomAvatar(MainFrameLogic.getInstance().getRoomAvatar());
 
-        //fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
+        fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
+    }
+
+    @FXML
+    void initialize() {
+
+        update();
 
         sendButton.setOnAction(event -> {
             System.out.println("LOG EVENT: Button SEND was pressed");
             sendMessage();
+            update();
         });
 
         publicKeyButton.setOnAction(event -> {
             System.out.println("Button KEY was pressed");
             getPublicKey();
+            update();
         });
 
         changeRoomAvatarButton.setOnAction(event -> {
             System.out.println("Button CHANGE ROOM AVATAR was pressed");
             changeRoomAvatar();
+            update();
         });
 
         changeUserAvatarButton.setOnAction(event -> {
             System.out.println("Button CHANGE USER AVATAR was pressed");
             changeUserAvatar();
+            update();
         });
 
         leaveRoomButton.setOnAction(event -> {
             System.out.println("Button LEAVE ROOM was pressed");
             escapeCurrentRoom();
+            update();
         });
 
         addParticipantButton.setOnAction(event -> {
             System.out.println("Button ADD PARTICIPANT was pressed");
             addParticipant();
+            update();
         });
 
         createRoomButton.setOnAction(event -> {
             System.out.println("Button CREATE ROOM was pressed");
-            createRoom();
+            try {
+                createRoom();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            update();
         });
     }
 }
