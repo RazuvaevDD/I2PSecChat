@@ -8,6 +8,7 @@ import sample.Objects.Room;
 import sample.Objects.TypeOfMessage;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,7 +45,7 @@ public class MainFrameLogic {
 
     private int currentRoomId;
 
-    private void setCurrentUser(Account account) {
+    public void setCurrentUser(Account account) {
         /**
          * Setter method that sets current user.
          * TODO: ACHTUNG! Method is private for protect against changing user.
@@ -89,13 +90,17 @@ public class MainFrameLogic {
         return currentRoomId;
     }
 
+    /**
+     * Function that returns messages for current room.
+     * TODO: Maybe we should find out how to protect this method from unauthorized access to hidden rooms.
+     *       Hint: you can check is current user are participant of room from parameter.
+     * @return List of Message object.
+     */
     public List<Message> getMessagesList() {
-        /**
-         * Function that returns messages for current room.
-         * TODO: Maybe we should find out how to protect this method from unauthorized access to hidden rooms.
-         *       Hint: you can check is current user are participant of room from parameter.
-         * @return List of Message object.
-         */
+        if (currentRoomId == 0) {
+            List<Message> emptyList = new ArrayList<>();
+            return emptyList;
+        }
         List<List<Object>> messages = Database.getMessagesInRoom(currentRoomId);
         List<Message> messagesList = new ArrayList<>();
         List<List<Object>> allUsers = Database.getAllUsers();
@@ -115,7 +120,7 @@ public class MainFrameLogic {
         return messagesList;
     }
 
-    public List<Room> getRoomsList() {
+    public List<Room> getRoomsList() throws NoSuchAlgorithmException {
         /**
          * Function that returns list of rooms for current user.
          * @return List of Room object.
@@ -125,12 +130,12 @@ public class MainFrameLogic {
         for (int i = 0; i < allRooms.size(); i++) {
             String filepath = "";
             try {
-                filepath = allRooms.get(i).get(5).toString();
+                filepath = allRooms.get(i).get(6).toString();
             }
             catch(NullPointerException e) {
                 filepath = "";
             }
-            roomList.add(new Room(allRooms.get(i).get(1).toString(), allRooms.get(i).get(2).toString(), (int)allRooms.get(i).get(3), allRooms.get(i).get(4).toString(), filepath));
+            roomList.add(new Room(allRooms.get(i).get(1).toString(), allRooms.get(i).get(2).toString(), (int)allRooms.get(i).get(3), allRooms.get(i).get(5).toString(), filepath));
             //System.out.println(i);
         }
         return roomList;
@@ -141,6 +146,10 @@ public class MainFrameLogic {
          * Function that returns participants of current room.
          * @return List of Account objects.
          */
+        if (currentRoomId == 0) {
+            List<Account> emptyList = new ArrayList<>();
+            return emptyList;
+        }
         List<List<Object>> usersInRoom = Database.getUsersInRoom(currentRoomId);
         List<Account> participantsList = new ArrayList<>();
         for (List<Object> user: usersInRoom) {
@@ -157,6 +166,10 @@ public class MainFrameLogic {
          *      It means that we should find out how to get contacts personal for logged user.
          *      There is shouldn't be any ways to get contacts of another user.
          */
+        if (currentUserId == 0) {
+            List<Account> emptyList = new ArrayList<>();
+            return emptyList;
+        }
         List<List<Object>> allUsers = Database.getAllUsers();
         List<String> userContacts = Database.getUsersContacts(currentUserId);
         List<Account> contactsList = new ArrayList<>();
@@ -196,7 +209,9 @@ public class MainFrameLogic {
          * Method that adds messages to database.
          * @param message String with text of message.
          */
-        Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, message, getDate());
+        if (currentRoomId != 0) {
+            Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, message, getDate());
+        }
     }
 
     public void addNewRoom(Room room) {
@@ -212,53 +227,69 @@ public class MainFrameLogic {
          * Method that adds new member to current room.
          * @param account Account object that will be added to room.
          */
-        notifyUsersAboutNewMember();
-        Database.add_user_to_room(currentRoomId, currentUserId);
+        if (currentRoomId != 0) {
+            notifyUsersAboutNewMember();
+            Database.add_user_to_room(currentRoomId, currentUserId);
+        }
     }
 
     protected void setRoomAvatarPath(String path) {
         Database.update_picture("room", 1, path);
     }
 
-    protected String getRoomAvatarPath(String roomAvatarPath) {
+    protected Image getRoomAvatar() {
         /**
          * Method that adds room avatar path to the database.
          * @param roomAvatarPath String object.
          */
+        if (currentRoomId == 0) {
+            return null;
+        }
         String path = "";
         List<List<Object>> rooms = Database.getAllRooms();
-        for(int i = 0; i < rooms.size(); i++) {
+        for (int i = 0; i < rooms.size(); i++) {
             if ((int)rooms.get(i).get(0) == currentRoomId){
                 path = Utils.bytesToImagePath((byte[])rooms.get(i).get(6));
                 break;
             }
         }
-        return path;
+        File file = new File(path);
+        Image roomAvatar = new Image(file.toURI().toString());
+        return roomAvatar;
     }
 
     protected void setUserAvatarPath(String path) {
-        Database.update_picture("user", currentUserId, path);
+        if (currentUserId != 0) {
+            Database.update_picture("user", currentUserId, path);
+        }
     }
 
     protected void escapeFromRoom() {
-        Database.deleteUserFromRoom(currentRoomId, currentUserId);
-        currentRoomId = 0;
-        currentRoom = null;
-        I2PConnector.sendMessage(new Message(currentUser, null, "User left chat", TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
-        Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, "User left chat", getDate());
+        if (currentRoomId != 0) {
+            Database.deleteUserFromRoom(currentRoomId, currentUserId);
+            currentRoomId = 0;
+            currentRoom = null;
+            I2PConnector.sendMessage(new Message(currentUser, null, "User left chat", TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
+            Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, "User left chat", getDate());
+        }
     }
 
     protected void notifyUsersAboutNewMember() {
-        I2PConnector.sendMessage(new Message(currentUser, null, "New user has come", TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
-        Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, "New user has come", getDate());
+        if (currentRoomId != 0) {
+            I2PConnector.sendMessage(new Message(currentUser, null, "New user has come", TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
+            Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, "New user has come", getDate());
+        }
     }
 
-    protected String getUserAvatarPath(String userAvatarPath) {
+    protected Image getUserAvatarPath(String userAvatarPath) {
         /**
          * Method that adds user avatar path to the database.
          * @param userAvatarPath String object.
          */
-        Database.update_picture("user", currentUserId, userAvatarPath);
+        if (currentUserId == 0)
+        {
+            return null;
+        }
         String path = "";
         List<List<Object>> users = Database.getAllUsers();
         for(int i = 0; i < users.size(); i++) {
@@ -267,6 +298,8 @@ public class MainFrameLogic {
                 break;
             }
         }
-        return path;
+        File file = new File(path);
+        Image userAvatar = new Image(file.toURI().toString());
+        return userAvatar;
     }
 }
