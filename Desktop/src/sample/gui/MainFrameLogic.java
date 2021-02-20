@@ -212,6 +212,10 @@ public class MainFrameLogic {
          * @param message String with text of message.
          */
         if (currentRoomId != 0) {
+            List<Account> roomUsers = getParticipantsList();
+            for (Account roomUser : roomUsers) {
+                I2PConnector.sendMessage(new Message(I2PConnector.getMyAccount(), roomUser, message, TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
+            }
             Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, message, getDate());
         }
     }
