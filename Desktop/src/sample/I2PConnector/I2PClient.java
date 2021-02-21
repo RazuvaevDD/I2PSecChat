@@ -13,7 +13,10 @@ import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 import sample.Objects.*;
-
+/**
+ * Этот класс реализует I2P клиент.
+ * @author Razuvaev Daniil
+ **/
 public class I2PClient {
 
     public static void SendMsg(Message msg){

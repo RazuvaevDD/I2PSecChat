@@ -1,18 +1,23 @@
 package com.razuvaevdd.I2PConnector;
 
-import com.razuvaevdd.Objects.Account;
+import android.content.Context;
+import android.provider.Settings;
 
-import com.razuvaevdd.Objects.Message;
-
+import com.razuvaevdd.Objects.*;
 import java.util.ArrayList;
-
+/**
+ * Этот класс реализует API I2PConnector. Одна из его основных функций - это
+ * соединение серверной части I2P, клиентской части I2P и HTTP клиента.
+ * @author Razuvaev Daniil
+ **/
 public class I2PConnector {
 
     private static TypeOfConnection connectionType = TypeOfConnection.I2PConnection;
 
     private static I2PServer i2pServer = new I2PServer();
     private static I2PClient i2pClient = new I2PClient();
-
+    private static HTTPService httpService;
+    private static Context context;
     /*
     Устанавливает тип соединения, которое используется для работы модуля
      */
@@ -23,20 +28,23 @@ public class I2PConnector {
     /*
     Запускает клиент/сервер и дополнительные сервисы
      */
-    public I2PConnector(){
+    public I2PConnector(Context context){
+        this.context = context;
         i2pServer.start();
         Account myAccount = getMyAccount();
-        new HTTPService(myAccount);
+        httpService = new HTTPService(context, myAccount);
     }
 
     /*
     Запускает клиент/сервер и дополнительные сервисы
      */
-    public I2PConnector(TypeOfConnection connectionType){
+    public I2PConnector(Context context, TypeOfConnection connectionType){
+        this.context = context;
         this.connectionType = connectionType;
-        i2pServer.start();
+        if(connectionType==TypeOfConnection.I2PConnection)
+            i2pServer.start();
         Account myAccount = getMyAccount();
-        new HTTPService(myAccount);
+        httpService = new HTTPService(context, myAccount);
     }
 
     /*
@@ -52,7 +60,7 @@ public class I2PConnector {
             t.start();
         }
         if(connectionType == TypeOfConnection.HTTPConnection){
-            HTTPService.SendMsg(msg);
+            httpService.SendMsg(msg);
         }
     }
 
@@ -63,7 +71,7 @@ public class I2PConnector {
         if (connectionType == TypeOfConnection.I2PConnection)
             return i2pServer.getNewMessages();
         if (connectionType == TypeOfConnection.HTTPConnection)
-            return HTTPService.getNewMessages();
+            return httpService.getNewMessages();
         System.err.println("[WARN] I2PConnector: данный connectionType не поддерживается.");
         return null;
     }
@@ -75,7 +83,7 @@ public class I2PConnector {
         if (connectionType == TypeOfConnection.I2PConnection)
             return i2pServer.haveNewMessages();
         if (connectionType == TypeOfConnection.HTTPConnection)
-            return HTTPService.haveNewMessages();
+            return httpService.haveNewMessages();
         System.err.println("[WARN] I2PConnector: данный connectionType не поддерживается.");
         return false;
     }
@@ -84,19 +92,25 @@ public class I2PConnector {
     Возвращает аккаунт пользователя или зависает, ожидая включения сервера.
      */
     public static Account getMyAccount() {
-        while(i2pServer.getMyDestination().isEmpty()){
-            try {
-                System.out.println("[INFO] I2PConnector: Ожидаем пока маршрутизатор строит туннели...");
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(!i2pServer.getMyDestination().isEmpty()){
-                System.out.println("[INFO] I2PConnector: Туннель выделен!");
-            }
-        };
-        Account account = new Account("My Account", i2pServer.getMyDestination());
-        return account;
+        if(connectionType==TypeOfConnection.I2PConnection){
+            while(i2pServer.getMyDestination().isEmpty()){
+                try {
+                    System.out.println("[INFO] I2PConnector: Ожидаем пока маршрутизатор строит туннели...");
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(!i2pServer.getMyDestination().isEmpty()){
+                    System.out.println("[INFO] I2PConnector: Туннель выделен!");
+                }
+            };
+            Account account = new Account("My Account I2P", i2pServer.getMyDestination());
+            return account;
+        }
+        else{
+            System.out.println("[DEBUG] I2PConnector: SecureID="+Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+            return new Account("My Android Account HTTP", Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID));
+        }
     }
 }
 

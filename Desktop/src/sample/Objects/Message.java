@@ -2,7 +2,11 @@ package sample.Objects;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+/**
+ * Этот класс реализует объект "Сообщение".
+ * Имеет собственную проверку корректности и упрощает работу с обработкой сообщений.
+ * @author Razuvaev Daniil
+ **/
 public class Message {
     public Account from;
     public Account to;

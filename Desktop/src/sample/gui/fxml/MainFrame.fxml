@@ -32,8 +32,8 @@
                                 <Font size="10.0" />
                             </font>
                         </Button>
-                        <Separator layoutY="187.0" prefHeight="3.0" prefWidth="217.0" />
-                        <Label alignment="CENTER" layoutX="69.0" layoutY="153.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Комнаты" textAlignment="CENTER" wrapText="false">
+                        <Separator layoutY="153.0" prefHeight="3.0" prefWidth="217.0" />
+                        <Label alignment="CENTER" layoutX="69.0" layoutY="119.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Комнаты" textAlignment="CENTER" wrapText="false">
                             <font>
                                 <Font size="18.0" fx:id="x1" />
                             </font>
@@ -41,8 +41,8 @@
                                 <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
                             </textFill>
                         </Label>
-                        <Separator layoutY="145.0" prefHeight="3.0" prefWidth="217.0" />
-                        <ScrollPane fx:id="roomScrollPane" layoutX="11.0" layoutY="200.0" prefHeight="150.0" prefWidth="195.0">
+                        <Separator layoutY="111.0" prefHeight="3.0" prefWidth="217.0" />
+                        <ScrollPane fx:id="roomScrollPane" layoutX="11.0" layoutY="224.0" prefHeight="126.0" prefWidth="195.0">
                             <content>
                                 <VBox fx:id="roomVBox" prefHeight="150.0" prefWidth="180.0" />
                             </content>
@@ -68,11 +68,12 @@
                         <VBox fx:id="roomVBox1" prefHeight="150.0" prefWidth="180.0" />
                      </content>
                   </ScrollPane>
-                  <Button fx:id="createRoomButton" layoutX="95.0" layoutY="108.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="111.0" text="СОЗДАТЬ КОМНАТУ">
+                  <Button fx:id="createRoomButton" layoutX="12.0" layoutY="194.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="111.0" text="СОЗДАТЬ КОМНАТУ">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Button>
+                  <TextField fx:id="roomNameTextField" layoutX="11.0" layoutY="162.0" prefHeight="25.0" prefWidth="195.0" promptText="Имя комнаты" />
                     </children>
                 </AnchorPane>
                 <AnchorPane prefHeight="576.0" prefWidth="379.0">
@@ -108,12 +109,12 @@
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Text>
-                        <Button fx:id="changeRoomAvatarButton" layoutX="10.0" layoutY="111.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ИЗМЕНИТЬ АВАТАР КОМНАТЫ">
+                        <Button fx:id="changeRoomAvatarButton" layoutX="10.0" layoutY="115.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ИЗМЕНИТЬ АВАТАР КОМНАТЫ">
                             <font>
                                 <Font size="10.0" />
                             </font>
                         </Button>
-                        <Button fx:id="leaveRoomButton" layoutX="10.0" layoutY="144.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ВЫЙТИ ИЗ КОМНАТЫ">
+                        <Button fx:id="leaveRoomButton" layoutX="10.0" layoutY="148.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ВЫЙТИ ИЗ КОМНАТЫ">
                             <font>
                                 <Font size="10.0" />
                             </font>
@@ -128,17 +129,19 @@
                         </Label>
                         <Separator layoutX="-1.0" layoutY="255.0" prefHeight="5.0" prefWidth="271.0" />
                         <Separator layoutY="210.0" prefWidth="270.0" />
-                        <ScrollPane fx:id="participantsScrollPane" layoutX="10.0" layoutY="269.0" prefHeight="293.0" prefWidth="195.0">
+                        <ScrollPane fx:id="participantsScrollPane" layoutX="10.0" layoutY="343.0" prefHeight="219.0" prefWidth="195.0">
                      <content>
-                                <VBox fx:id="participantsVBox" prefHeight="292.0" prefWidth="180.0" />
+                                <VBox fx:id="participantsVBox" prefHeight="222.0" prefWidth="180.0" />
                      </content>
                         </ScrollPane>
                         <ImageView fx:id="roomAvatarImageView" fitHeight="80.0" fitWidth="80.0" layoutX="10.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="addParticipantButton" layoutX="10.0" layoutY="177.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="ДОБАВИТЬ УЧАСТНИКА">
+                  <Button fx:id="addParticipantButton" layoutX="11.0" layoutY="305.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="130.0" text="ДОБАВИТЬ УЧАСТНИКА">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Button>
+                  <TextField fx:id="nameTextField" layoutX="11.0" layoutY="268.0" prefHeight="25.0" prefWidth="120.0" promptText="Имя участника" />
+                  <TextField fx:id="keyTextField" layoutX="140.0" layoutY="268.0" prefHeight="25.0" prefWidth="120.0" promptText="Ключ участника" />
                     </children>
                 </AnchorPane>
             </items>

@@ -14,19 +14,25 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
-
+/**
+ * Этот класс реализует HTTP клиент.
+ * @author Razuvaev Daniil
+ **/
 public class HTTPService {
-    static Account myAccount;
+    Account myAccount;
+    private int errorStack = 0;
+    private static final int MAX_ERROR_STACK = 100;
+    private String internalException = null;
 
     public HTTPService(Account myAccount) {
         this.myAccount = myAccount;
     }
 
-    public static ArrayList<Message> getNewMessages() {
+    public ArrayList<Message> getNewMessages() {
         ArrayList<Message> messages = new ArrayList();
         System.out.println("[INFO] HTTPService: Получение сообщений...");
         try {
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
+            URL url = new URL("http://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -68,24 +74,28 @@ public class HTTPService {
                         )
                 );
             }
-
         } catch (Exception e) {
-            //e.getMessage().contains(substring)
-            System.err.println("[UNCRITICAL ERROR] HTTPService: Сообщения не получены. Причина: Внутренняя ошибка.");
-            System.err.println("========СТЭК========");
-            e.printStackTrace();
-            System.err.println("====конец==стека====");
+            internalException = e.getMessage();
         }
+        if(errorStack > MAX_ERROR_STACK){
+            System.err.println("[UNCRITICAL ERROR] HTTPService: getNewMessages(): "+internalException);
+            System.err.println("[WARN] HTTPService: getNewMessages(): Список сообщений возвращает пустой список.");
+            return messages;
+        }
+        errorStack++;
+        if(haveNewMessages())
+            messages = getNewMessages();
+        errorStack = 0;
         return messages;
     }
 
-    public static void SendMsg(Message msg) {
+    public void SendMsg(Message msg) {
         System.out.println("[INFO] HTTPService: Отправка сообщения...");
         try{
             String msgStr = msg.type.ordinal()+"<<SYSTEM_X>>" +myAccount.destination
                     +"<<SYSTEM_X>>" + msg.message +"<<SYSTEM_X>>" + msg.hashOfRoom + "<<SYSTEM_X>>"+ msg.time;
 
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
+            URL url = new URL("http://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -109,18 +119,24 @@ public class HTTPService {
                 os.write(out);
             }
             System.out.println("[INFO] HTTPService: Сообщение успешно отправлено.");
+            return;
         } catch (Exception e) {
-            System.err.println("[UNCRITICAL ERROR] HTTPService: Сообщение не отправлено. Причина: Внутренняя ошибка.");
-            System.err.println("========СТЭК========");
-            e.printStackTrace();
-            System.err.println("====конец==стека====");
+            internalException = e.getMessage();
         }
+        if(errorStack > MAX_ERROR_STACK){
+            System.err.println("[UNCRITICAL ERROR] HTTPService: SendMsg(Message): "+internalException);
+            System.err.println("[WARN] HTTPService: SendMsg(Message): Сообщение не отправлено.");
+            return;
+        }
+        errorStack++;
+        SendMsg(msg);
+        errorStack = 0;
     }
 
-    public static boolean haveNewMessages() {
+    public boolean haveNewMessages() {
         System.out.println("[INFO] HTTPService: Проверка наличия сообщений...");
         try {
-            URL url = new URL("https://secchatphpservice.000webhostapp.com/index.php");
+            URL url = new URL("http://secchatphpservice.000webhostapp.com/api.php");
             URLConnection con = url.openConnection();
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
@@ -143,6 +159,7 @@ public class HTTPService {
                 os.write(out);
             }
 
+
             InputStreamReader isReader = new InputStreamReader(http.getInputStream());
             BufferedReader reader = new BufferedReader(isReader);
 
@@ -153,16 +170,20 @@ public class HTTPService {
             } else if(res.equals("false")){
                 return false;
             } else {
-                throw new Exception("[UNCRITICAL ERROR] HTTPService: Сервер возвратил неожиданный ответ: \""+res+"\"");
+                throw new Exception("Сервер возвратил неожиданный ответ: \""+res+"\"");
             }
 
         }catch (Exception e) {
-            System.err.println("[UNCRITICAL ERROR] HTTPService: Проверка завершилась неудачно. Причина: Внутренняя ошибка.");
-            System.err.println("========СТЭК========");
-            e.printStackTrace();
-            System.err.println("====конец==стека====");
+            internalException = e.getMessage();
         }
-        System.err.println("[WARN] HTTPService: haveNewMessages(): Насильно возвращено false. Непредвиденное поведение программы, сообщите разработчику.");
-        return false;
+        if(errorStack > MAX_ERROR_STACK){
+            System.err.println("[UNCRITICAL ERROR] HTTPService: haveNewMessages(): "+internalException);
+            System.err.println("[WARN] HTTPService: haveNewMessages(): Возвращаем false.");
+            return false;
+        }
+        errorStack++;
+        boolean res = haveNewMessages();
+        errorStack = 0;
+        return res;
     }
 }
