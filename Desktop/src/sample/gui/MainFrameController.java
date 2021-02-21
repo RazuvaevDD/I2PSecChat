@@ -299,6 +299,9 @@ public class MainFrameController {
     @FXML
     void initialize() {
 
+        MainFrameLogic.getInstance().setCurrentUser(I2PConnector.getMyAccount());
+        MainFrameLogic.getInstance().setCurrentRoom(MainFrameLogic.getInstance().getRoomsList().get(0));
+
         update();
 
         sendButton.setOnAction(event -> {

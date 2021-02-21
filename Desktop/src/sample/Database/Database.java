@@ -149,6 +149,7 @@ public class Database {
             preparedStatement.setBytes(5, readFile(file_name));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("add_user db func");
             System.out.println(e.getMessage());
         }
     }
@@ -204,6 +205,7 @@ public class Database {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
+            System.out.println("register_message db func");
             System.out.println(e.getMessage());
         }
     }
@@ -211,6 +213,21 @@ public class Database {
     public static int get_id(String table_name, String name){
         int id = 0;
         String get_id = String.format("select id from %s where name = '%s'", table_name, name);
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_id)) {
+
+            while (result.next()) {
+                id = result.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return id;
+    }
+
+    public static int getIdByHash(String table_name, String hash){
+        int id = 0;
+        String get_id = String.format("select id from %s where private_key = '%s'", table_name, hash);
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_id)) {
@@ -231,6 +248,7 @@ public class Database {
             preparedStatement.setInt(2, user_id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("add_user_to_room db func");
             System.out.println(e.getMessage());
         }
     }
@@ -255,6 +273,7 @@ public class Database {
             }
 
         } catch (SQLException e) {
+            System.out.println("get_all_users db func");
             System.out.println(e.getMessage());
         } return  users;
     }

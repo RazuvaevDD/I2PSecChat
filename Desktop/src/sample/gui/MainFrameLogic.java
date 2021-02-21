@@ -216,6 +216,7 @@ public class MainFrameLogic {
             for (Account roomUser : roomUsers) {
                 I2PConnector.sendMessage(new Message(I2PConnector.getMyAccount(), roomUser, message, TypeOfMessage.StringMessage, currentRoom.getAESKey(), getDate()));
             }
+
             Database.register_message(currentRoomId, currentRoom.getAESKey(), currentUserId, 0, message, getDate());
         }
     }
@@ -235,7 +236,9 @@ public class MainFrameLogic {
          */
         if (currentRoomId != 0) {
             notifyUsersAboutNewMember();
-            Database.add_user_to_room(currentRoomId, currentUserId);
+            Database.add_user(account.name, account.destination, account.destination, "", "");
+            int newMemberId = Database.get_id("user", account.name);
+            Database.add_user_to_room(currentRoomId, newMemberId);
         }
     }
 
