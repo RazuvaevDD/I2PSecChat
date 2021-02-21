@@ -41,14 +41,14 @@ public class OrderedProperties extends Properties {
     }
 
     @Override
-    public Set<Map.Entry<Object, Object>> entrySet() {
-        TreeSet<Map.Entry<Object, Object>> rv = new TreeSet<Map.Entry<Object, Object>>(new EntryComparator());
+    public Set<Entry<Object, Object>> entrySet() {
+        TreeSet<Entry<Object, Object>> rv = new TreeSet<Entry<Object, Object>>(new EntryComparator());
         rv.addAll(super.entrySet());
         return Collections.unmodifiableSortedSet(rv);
     }
 
-    private static class EntryComparator implements Comparator<Map.Entry<Object, Object>>, Serializable {
-         public int compare(Map.Entry<Object, Object> l, Map.Entry<Object, Object> r) {
+    private static class EntryComparator implements Comparator<Entry<Object, Object>>, Serializable {
+         public int compare(Entry<Object, Object> l, Entry<Object, Object> r) {
              return ((String)l.getKey()).compareTo(((String)r.getKey()));
         }
     }

@@ -679,7 +679,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * @param version        The version string of the input file. If this is
      *                       longer than 16 characters it will be truncated.
      * 
-     * @return An instance of {@link net.i2p.data.Signature}, or
+     * @return An instance of {@link Signature}, or
      *         <code>null</code> if there was an error.
      */
     public Signature sign(String inputFile, String signedFile, String privateKeyFile, String version) {
@@ -711,7 +711,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
     }
 
     /**
-     * Uses the given {@link net.i2p.data.SigningPrivateKey} to sign the given
+     * Uses the given {@link SigningPrivateKey} to sign the given
      * input file along with its version string using DSA. The output will be a
      * signed update file where the first 40 bytes are the resulting DSA
      * signature, the next 16 bytes are the input file's version string encoded
@@ -725,7 +725,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * @param version           The version string of the input file. If this is
      *                          longer than 16 characters it will be truncated.
      * 
-     * @return An instance of {@link net.i2p.data.Signature}, or
+     * @return An instance of {@link Signature}, or
      *         <code>null</code> if there was an error.
      */
     public Signature sign(String inputFile, String signedFile, SigningPrivateKey signingPrivateKey, String version) {
@@ -888,7 +888,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      * 
      * @param signedFile       The signed update file to check.
      * @param signingPublicKey An instance of
-     *                         {@link net.i2p.data.SigningPublicKey} to use for
+     *                         {@link SigningPublicKey} to use for
      *                         verification.
      * 
      * @return <code>true</code> if the file has a valid signature, otherwise

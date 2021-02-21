@@ -17,7 +17,10 @@ import net.i2p.client.streaming.I2PSocketManagerFactory;
 import sample.Objects.Account;
 import sample.Objects.Message;
 import sample.Objects.TypeOfMessage;
-
+/**
+ * Этот класс является сервером API.
+ * @author Razuvaev Daniil
+ **/
 public class I2PServer extends Thread{
 
     private static String myDestination = "";

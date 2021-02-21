@@ -22,7 +22,7 @@ import org.xlattice.crypto.filters.BloomSHA1;
  * See BloomFilterIVValidator for instantiation parameters.
  * See DecayingHashSet for a smaller and simpler version.
  * @see net.i2p.router.tunnel.BloomFilterIVValidator
- * @see net.i2p.router.util.DecayingHashSet
+ * @see DecayingHashSet
  */
 public class DecayingBloomFilter {
     protected final I2PAppContext _context;

@@ -27,7 +27,7 @@ import net.i2p.data.SigningPrivateKey;
  *
  * Periodically the router will ask the client to authorize a new set of
  * tunnels to be allocated to the client, which the client can accept by sending a
- * {@link net.i2p.data.LeaseSet} signed by the {@link net.i2p.data.Destination}.  
+ * {@link net.i2p.data.LeaseSet} signed by the {@link Destination}.
  * In addition, the router may on occasion provide the client with an updated 
  * clock offset so that the client can stay in sync with the network (even if 
  * the host computer's clock is off).</p>
@@ -211,8 +211,8 @@ public interface I2PSession {
      * @since 0.9.14
      */
     public long sendMessage(Destination dest, byte[] payload, int offset, int size,
-                               int proto, int fromPort, int toPort,
-                               SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException;
+                            int proto, int fromPort, int toPort,
+                            SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException;
 
     /** Receive a message that the router has notified the client about, returning
      * the payload.

@@ -134,7 +134,7 @@ class ClientConnectionRunner {
     /**
      * Actually run the connection - listen for I2CP messages and respond.  This
      * is the main driver for this class, though it gets all its meat from the
-     * {@link net.i2p.data.i2cp.I2CPMessageReader I2CPMessageReader}
+     * {@link I2CPMessageReader I2CPMessageReader}
      *
      */
     public synchronized void startRunning() throws IOException {

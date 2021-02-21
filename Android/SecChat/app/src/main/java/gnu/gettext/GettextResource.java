@@ -109,7 +109,7 @@ public abstract class GettextResource extends ResourceBundle {
       Method handleGetObjectMethod = null;
       Method getParentMethod = null;
       try {
-        handleGetObjectMethod = catalog.getClass().getMethod("handleGetObject", new Class[] { java.lang.String.class });
+        handleGetObjectMethod = catalog.getClass().getMethod("handleGetObject", new Class[] { String.class });
         getParentMethod = catalog.getClass().getMethod("getParent", new Class[0]);
       } catch (NoSuchMethodException e) {
       } catch (SecurityException e) {
@@ -123,7 +123,7 @@ public abstract class GettextResource extends ResourceBundle {
         Method lookupMethod = null;
         Method pluralEvalMethod = null;
         try {
-          lookupMethod = catalog.getClass().getMethod("lookup", new Class[] { java.lang.String.class });
+          lookupMethod = catalog.getClass().getMethod("lookup", new Class[] { String.class });
           pluralEvalMethod = catalog.getClass().getMethod("pluralEval", new Class[] { Long.TYPE });
         } catch (NoSuchMethodException e) {
         } catch (SecurityException e) {

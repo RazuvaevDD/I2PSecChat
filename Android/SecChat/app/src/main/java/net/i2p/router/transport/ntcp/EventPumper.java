@@ -83,7 +83,7 @@ class EventPumper implements Runnable {
     /**
      *  Do we use direct buffers for reading? Default false.
      *  NOT recommended as we don't keep good track of them so they will leak.
-     *  @see java.nio.ByteBuffer
+     *  @see ByteBuffer
      */
     private static final String PROP_DIRECT = "i2np.ntcp.useDirectBuffers";
 
@@ -116,7 +116,7 @@ class EventPumper implements Runnable {
             new I2PThread(this, "NTCP Pumper", true).start();
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error opening the NTCP selector", ioe);
-        } catch (java.lang.InternalError jlie) {
+        } catch (InternalError jlie) {
             // "unable to get address of epoll functions, pre-2.6 kernel?"
             _log.log(Log.CRIT, "Error opening the NTCP selector", jlie);
         }

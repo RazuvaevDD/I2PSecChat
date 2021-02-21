@@ -22,6 +22,6 @@ import org.cybergarage.upnp.Device;
 
 public interface DeviceChangeListener
 {
-	public void deviceAdded( Device dev );
-	public void deviceRemoved( Device dev );
+	public void deviceAdded(Device dev);
+	public void deviceRemoved(Device dev);
 }

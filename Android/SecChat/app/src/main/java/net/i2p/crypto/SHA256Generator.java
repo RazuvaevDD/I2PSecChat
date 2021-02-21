@@ -14,7 +14,7 @@ import net.i2p.data.Hash;
  * 
  * As of release 0.8.7, uses java.security.MessageDigest by default.
  * If that is unavailable, it uses
- * GNU-Crypto {@link gnu.crypto.hash.Sha256Standalone}
+ * GNU-Crypto {@link Sha256Standalone}
  */
 public final class SHA256Generator {
     private final LinkedBlockingQueue<MessageDigest> _digests;

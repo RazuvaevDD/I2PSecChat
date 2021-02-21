@@ -149,6 +149,7 @@ public class Database {
             preparedStatement.setBytes(5, readFile(file_name));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("add_user db func");
             System.out.println(e.getMessage());
         }
     }
@@ -204,6 +205,7 @@ public class Database {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
+            System.out.println("register_message db func");
             System.out.println(e.getMessage());
         }
     }
@@ -211,6 +213,21 @@ public class Database {
     public static int get_id(String table_name, String name){
         int id = 0;
         String get_id = String.format("select id from %s where name = '%s'", table_name, name);
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_id)) {
+
+            while (result.next()) {
+                id = result.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return id;
+    }
+
+    public static int getIdByHash(String table_name, String hash){
+        int id = 0;
+        String get_id = String.format("select id from %s where private_key = '%s'", table_name, hash);
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(get_id)) {
@@ -231,6 +248,7 @@ public class Database {
             preparedStatement.setInt(2, user_id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("add_user_to_room db func");
             System.out.println(e.getMessage());
         }
     }
@@ -255,6 +273,7 @@ public class Database {
             }
 
         } catch (SQLException e) {
+            System.out.println("get_all_users db func");
             System.out.println(e.getMessage());
         } return  users;
     }
@@ -466,4 +485,56 @@ public class Database {
         return messages_in_room;
     }
 
+    public static byte[] getPicture(String table_name, int id) {
+        byte[] picture = null;
+
+        String get_pic = String.format("SELECT picture FROM %s where id = %x;", table_name, id);
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(get_pic)) {
+
+            picture = result.getBytes("picture");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return picture;
+    }
+
+    public static void changeName(String table_name, int user_id, String new_name) {
+        String update_name = String.format("update %s set name = ? where id = ?", table_name);
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(update_name)) {
+            preparedStatement.setString(1, new_name);
+            preparedStatement.setInt(2, user_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void deleteUserFromRoom(int room_id, int user_id) {
+        String delete_user_from_room = "delete from rooms where room_id = ? and user_id = ?";
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(delete_user_from_room)) {
+            preparedStatement.setInt(1, room_id);
+            preparedStatement.setInt(2, user_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static int getRoomIdbyHash(String hash) {
+        int id = 0;
+        String getRoomByHash = String.format("select id from room where hash = \"%s\";", hash);
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(getRoomByHash)) {
+
+            id = result.getInt("id");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } return id;
+    }
 }
