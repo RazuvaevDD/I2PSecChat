@@ -1,50 +1,34 @@
 package sample.gui;
 
-import com.sun.corba.se.impl.orb.DataCollectorBase;
-import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 //import javafx.scene.text.Text;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
-import javax.xml.crypto.Data;
 //import javax.swing.text.html.ImageView;
 import javafx.scene.image.ImageView;
 //import java.awt.*;
 import javafx.scene.image.Image;
-import sample.Database.Database;
-import sample.I2PConnector.I2PConnector;
-import sample.Main;
 import sample.Objects.Account;
 import sample.Objects.Message;
 import sample.Objects.Room;
-import sample.Objects.TypeOfMessage;
-import sample.Utils.Utils;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.image.DataBuffer;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This class realizing controller for GUI of main frame.
@@ -105,7 +89,7 @@ public class MainFrameController {
     private VBox messagesVBox;
 
     @FXML
-    private VBox roomVBox;
+    private ListView<Label> roomVBox;
 
     @FXML
     private VBox participantsVBox;
@@ -176,28 +160,33 @@ public class MainFrameController {
             messagesVBox.getChildren().add(label);
         }
     }
-    private void fakeFillMessagesArea() {
-        for (int i = 0; i < 10; i++) {
-            Label label = new Label("DD.MM.HHHH" + ", " + "Userrr" + ": " + "message message message");
-            messagesVBox.getChildren().add(label);
-        }
-    }
+
     /**
      * Method filling GUI rooms area in UI with list of rooms.
      * @param roomsList: List of Room objects.
      */
     private void fillRooms(List<Room> roomsList) {
-        roomVBox.getChildren().clear();
+        roomVBox.getItems().clear();
         for (Room room : roomsList) {
             Label label = new Label(room.getName());
-            roomVBox.getChildren().add(label);
+            roomVBox.getItems().add(label);
         }
+        roomVBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String nameOfRoom = roomVBox.getSelectionModel().getSelectedItem().getText();
+                System.out.println("CLICKED on " + nameOfRoom);
+                for (Room room : roomsList) {
+                    if (room.getName().equals(nameOfRoom)) {
+                        MainFrameLogic.getInstance().setCurrentRoom(room);
+                    }
+                }
+            }
+        });
     }
-    private void fakeFillRooms() {
-        for (int i = 0; i < 10; i++) {
-            Label label = new Label("Room Name");
-            roomVBox.getChildren().add(label);
-        }
+
+    @FXML public void handleMouseClick(MouseEvent arg0) {
+        System.out.println("clicked on " + roomVBox.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -208,12 +197,6 @@ public class MainFrameController {
         participantsVBox.getChildren().clear();
         for (Account account : participantsList) {
             Label label = new Label(account.name);
-            participantsVBox.getChildren().add(label);
-        }
-    }
-    private void fakeFillParticipants() {
-        for (int i = 0; i < 10; i++) {
-            Label label = new Label("Participant Name");
             participantsVBox.getChildren().add(label);
         }
     }
@@ -267,8 +250,18 @@ public class MainFrameController {
     void createRoom() throws NoSuchAlgorithmException {
         String roomName = roomNameTextField.getText();
         if (roomName != null && !roomName.equals("")) {
-            Room room = new Room(roomName, "", 999999999, "sample/gui/resources/gear.png");
-            MainFrameLogic.getInstance().addNewRoom(room);
+            List<String> listOfNames = new ArrayList<>();
+
+            for (Room room : MainFrameLogic.getInstance().getRoomsList()) {
+                listOfNames.add(room.getName());
+                //заменить на перебор всех имен и спавнивать с текстовым полем. Если хоть раз совпадет, то врейк
+            }
+            if (!listOfNames.contains(roomName)) {
+                Room room = new Room(roomName, "", 999999999, "sample/gui/resources/gear.png");
+                MainFrameLogic.getInstance().addNewRoom(room);
+            } else {
+                roomNameTextField.promptTextProperty().setValue("Такая комната уже есть");
+            }
         } else {
             roomNameTextField.promptTextProperty().setValue("Неправильное имя");
         }
@@ -280,7 +273,10 @@ public class MainFrameController {
         }
     }
 
+    @FXML
     void update() {
+        System.out.println("LOG EVENT: screen updated");
+
         fillDate(MainFrameLogic.getInstance().getDate());
 
         fillMessagesArea(MainFrameLogic.getInstance().getMessagesList());
@@ -293,7 +289,7 @@ public class MainFrameController {
 
         fillRoomAvatar(MainFrameLogic.getInstance().getRoomAvatar());
 
-        fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
+        //fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
     }
 
     @FXML

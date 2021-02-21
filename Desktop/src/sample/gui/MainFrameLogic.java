@@ -74,6 +74,7 @@ public class MainFrameLogic {
          * Setter method that sets current room.
          * @param room current room as Room object.
          */
+        System.out.print("Will be switched to room " + room.getName());
         currentRoomId = Database.getRoomIdbyHash(room.getAESKey());
         currentRoom = room;
     }
