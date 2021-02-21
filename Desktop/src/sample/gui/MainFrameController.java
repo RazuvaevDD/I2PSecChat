@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 //import java.awt.*;
 import javafx.scene.image.Image;
+import sample.I2PConnector.I2PConnector;
 import sample.Objects.Account;
 import sample.Objects.Message;
 import sample.Objects.Room;
@@ -121,7 +122,7 @@ public class MainFrameController {
     private void changeUserAvatar() {
         File userAvatar = chooseImage();
         if (userAvatar != null) {
-            System.out.print("Opening file..." + userAvatar.getPath());
+            System.out.println("Opening file..." + userAvatar.getPath());
             MainFrameLogic.getInstance().setUserAvatarPath(userAvatar.getPath());
         }
     }
@@ -220,6 +221,14 @@ public class MainFrameController {
     }
 
     /**
+     * Method filling name of current room.
+     * @param roomName: String with name of room.
+     */
+    private void fillUserName(String roomName) {
+        this.Username.setText(roomName);
+    }
+
+    /**
      * Method filling date in GUI.
      * @param date: String with current date.
      */
@@ -289,11 +298,16 @@ public class MainFrameController {
 
         fillRoomAvatar(MainFrameLogic.getInstance().getRoomAvatar());
 
-        //fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
+        fillRoomName(MainFrameLogic.getInstance().getCurrentRoom().getName());
+
+        fillUserName(MainFrameLogic.getInstance().getCurrentUser().name);
     }
 
     @FXML
     void initialize() {
+
+        MainFrameLogic.getInstance().setCurrentUser(I2PConnector.getMyAccount());
+        MainFrameLogic.getInstance().setCurrentRoom(MainFrameLogic.getInstance().getRoomsList().get(0));
 
         update();
 
