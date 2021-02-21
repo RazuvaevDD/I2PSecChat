@@ -1,5 +1,6 @@
 package com.razuvaevdd.I2PConnector;
 
+import com.razuvaevdd.Objects.*;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -14,10 +15,10 @@ import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
-import com.razuvaevdd.Objects.Account;
-import com.razuvaevdd.Objects.Message;
-import com.razuvaevdd.Objects.TypeOfMessage;
-
+/**
+ * Этот класс является сервером API.
+ * @author Razuvaev Daniil
+ **/
 public class I2PServer extends Thread{
 
     private static String myDestination = "";
@@ -42,10 +43,7 @@ public class I2PServer extends Thread{
         try{
             //String dir = System.getProperty("user.dir");
             //String keyFilePath = dir + "\\src\\sample\\I2PConnector\\key.dat";
-            String keyFilePath = System.getProperty("java.io.tmpdir")+"//key.dat";
-
-            //String keyFilePath = cashDir+"//key.dat";
-
+            String keyFilePath = System.getProperty("java.io.tmpdir")+"key.dat";
             if(!(new File(keyFilePath).exists())) { //если ключ не существует
                 System.out.println("[INFO] I2PServer: Генерируем ключ...");
                 PrivateKeyFile.main(new String[]{"-h", keyFilePath});//генерируем
